@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -308,9 +309,9 @@
     <p class="hero-sub">2026.08.01 — 08.04 · GREEN ISLAND</p>
 
     <div class="search-card">
-      <span class="search-label">輸入本名，查看你的行程與船班</span>
+      <span class="search-label">輸入綽號，查看你的行程與船班</span>
       <div class="search-row">
-        <input type="text" id="nameInput" placeholder="例：林詩豪" autocomplete="off" />
+        <input type="text" id="nameInput" placeholder="例：詩豪、阿緯、Box" autocomplete="off" />
         <button class="search-btn" onclick="lookup()">查詢 →</button>
       </div>
       <div class="error-msg" id="errMsg">找不到這個名字，請確認是否為報名時填寫的本名</div>
@@ -355,71 +356,54 @@
 <script>
 // ── 資料 ──────────────────────────────────────────────
 const MEMBERS = [
-  // ── 綠邑旅宿 ──
-  // 四人房A：林承緯(阿緯)、小丞、周民哲(阿哲)、鐘元志
-  { name:"林承緯", alias:"阿緯",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["徐丞逸","周民哲","鐘元志"], taitung_need:true },
-  { name:"徐丞逸", alias:"小丞",          ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["林承緯","周民哲","鐘元志"], taitung_need:false },
-  { name:"周民哲", alias:"阿哲",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["林承緯","徐丞逸","鐘元志"], taitung_need:true },
-  { name:"鐘元志", alias:"鐘元志",          ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["林承緯","徐丞逸","周民哲"], taitung_need:false },
-  // 六人房：賴昶佑(八月)、林詩豪(詩豪)、曾獻生(雞腿)、郭旭東(可樂)、林群晏(小晏)、謝宗庭(阿金)
-  { name:"賴昶佑", alias:"八月",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["林詩豪","曾獻生","郭旭東","林群晏","謝宗庭"], taitung_need:false },
-  { name:"林詩豪", alias:"詩豪",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["賴昶佑","曾獻生","郭旭東","林群晏","謝宗庭"], taitung_need:true },
-  { name:"曾獻生", alias:"雞腿",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["賴昶佑","林詩豪","郭旭東","林群晏","謝宗庭"], taitung_need:false },
-  { name:"郭旭東", alias:"可樂",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["賴昶佑","林詩豪","曾獻生","林群晏","謝宗庭"], taitung_need:false },
-  { name:"林群晏", alias:"小晏",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["賴昶佑","林詩豪","曾獻生","郭旭東","謝宗庭"], taitung_need:false },
-  { name:"謝宗庭", alias:"阿金",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["賴昶佑","林詩豪","曾獻生","郭旭東","林群晏"], taitung_need:true },
-  // 四人房B：Neil、曾振瑋(振瑋)、大興、許凱証(表哥)
-  { name:"Neil",   alias:"",          ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["曾振瑋","石培鑫","許凱証"], taitung_need:false },
-  { name:"曾振瑋", alias:"振瑋",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","石培鑫","許凱証"], taitung_need:false },
-  { name:"石培鑫",   alias:"大興",       ferry_go:"台東→綠島 11:30（凱旋3號 K31130）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","曾振瑋","許凱証"], taitung_need:false },
-  { name:"許凱証", alias:"表哥",      ferry_go:"台東→綠島 11:30（凱旋3號 K31130）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","曾振瑋","石培鑫"], taitung_need:false },
-  { name:"石培鑫", alias:"石培鑫",      ferry_go:"台東→綠島 11:30（凱旋3號 K31130）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"待補", green_mates:[], taitung_need:false },
-  // 雙人房：戴語絜(娜娜)、白羽涵(小白)
-  { name:"戴語絜", alias:"娜娜",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"雙人房", green_mates:["白羽涵"], taitung_need:false },
-  { name:"白羽涵", alias:"小白",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"雙人房", green_mates:["戴語絜"], taitung_need:false },
-
-  // ── 綠島九號精品 ──
-  // 六人房A：葉竣銘(小竣)、古名尊(小古)、謝鈞任(大大)、林和億(和億)、謝紳泉(泉)、周珈佑(珈佑)
-  { name:"葉竣銘", alias:"小竣",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["古名尊","謝鈞任","林和億","謝紳泉","周珈佑"], taitung_need:false },
-  { name:"古名尊", alias:"小古",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["葉竣銘","謝鈞任","林和億","謝紳泉","周珈佑"], taitung_need:false },
-  { name:"謝鈞任", alias:"大大",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["葉竣銘","古名尊","林和億","謝紳泉","周珈佑"], taitung_need:true },
-  { name:"林和億", alias:"和億",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["葉竣銘","古名尊","謝鈞任","謝紳泉","周珈佑"], taitung_need:true },
-  { name:"謝紳泉", alias:"泉",        ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["葉竣銘","古名尊","謝鈞任","林和億","周珈佑"], taitung_need:false },
-  { name:"周珈佑", alias:"珈佑",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["葉竣銘","古名尊","謝鈞任","林和億","謝紳泉"], taitung_need:true },
-  // 六人房B：楊貴智(貴智)、蘇奕翰(奕翰)、孫聖峰(聖峰)、劉家齊(Alvin)、曾耀男(Felix)、謝明哲(Pio)
-  { name:"楊貴智", alias:"貴智",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["蘇奕翰","孫聖峰","劉家齊","曾耀男","謝明哲"], taitung_need:false },
-  { name:"蘇奕翰", alias:"奕翰",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["楊貴智","孫聖峰","劉家齊","曾耀男","謝明哲"], taitung_need:false },
-  { name:"孫聖峰", alias:"聖峰",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["楊貴智","蘇奕翰","劉家齊","曾耀男","謝明哲"], taitung_need:false },
-  { name:"劉家齊", alias:"Alvin",     ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["楊貴智","蘇奕翰","孫聖峰","曾耀男","謝明哲"], taitung_need:true },
-  { name:"曾耀男", alias:"Felix",     ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["楊貴智","蘇奕翰","孫聖峰","劉家齊","謝明哲"], taitung_need:true },
-  { name:"謝明哲", alias:"Pio",       ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["楊貴智","蘇奕翰","孫聖峰","劉家齊","曾耀男"], taitung_need:true },
-  // 六人房C：卓彥廷(黑)、洪煒晴(煒晴)、陳奕方(奕方)、李任翔(Volten)、陳泓文(阿文)、吳政軒(軒哥)
-  { name:"卓彥廷", alias:"黑",        ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["洪煒晴","陳奕方","李任翔","陳泓文","吳政軒"], taitung_need:true },
-  { name:"洪煒晴", alias:"煒晴",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["卓彥廷","陳奕方","李任翔","陳泓文","吳政軒"], taitung_need:true },
-  { name:"陳奕方", alias:"奕方",      ferry_go:"8/2 台東→綠島 07:30（天王星 S0730）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["卓彥廷","洪煒晴","李任翔","陳泓文","吳政軒"], taitung_need:false },
-  { name:"李任翔", alias:"Volten / V",ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["卓彥廷","洪煒晴","陳奕方","陳泓文","吳政軒"], taitung_need:true },
-  { name:"陳泓文", alias:"阿文",      ferry_go:"台東→綠島 13:30（綠星2號 G21330）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["卓彥廷","洪煒晴","陳奕方","李任翔","吳政軒"], taitung_need:false },
-  { name:"吳政軒", alias:"軒哥",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["卓彥廷","洪煒晴","陳奕方","李任翔","陳泓文"], taitung_need:true },
-  // 四人房：程科諺(科諺)、施俊仰(Jerry)、謝金融(CJ)、陳瑞廷(阿廷)
-  { name:"程科諺", alias:"科諺",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["施俊仰","謝金融","陳瑞廷"], taitung_need:true },
-  { name:"施俊仰", alias:"Jerry",     ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["程科諺","謝金融","陳瑞廷"], taitung_need:true },
-  { name:"謝金融", alias:"CJ",        ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["程科諺","施俊仰","陳瑞廷"], taitung_need:true },
-  { name:"陳瑞廷", alias:"阿廷",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["程科諺","施俊仰","謝金融"], taitung_need:false },
-  // 標準雙人房A：徐士清(Jacky)、郭曜瑋(瑋瑋)
-  { name:"徐士清", alias:"Jacky",     ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房A", green_mates:["郭曜瑋"], taitung_need:true },
-  { name:"郭曜瑋", alias:"瑋瑋",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房A", green_mates:["徐士清"], taitung_need:true },
-  // 標準雙人房B：許任廷(小任)、吳艾倫(Allen)
-  { name:"許任廷", alias:"小任",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房B", green_mates:["吳艾倫"], taitung_need:true },
-  { name:"吳艾倫", alias:"Allen",     ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房B", green_mates:["許任廷"], taitung_need:true },
-  // 甜蜜雙人房A：林育詳(Alex)、李啓彰(阿彰)
-  { name:"林育詳", alias:"Alex",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房A", green_mates:["李啓彰"], taitung_need:true },
-  { name:"李啓彰", alias:"阿彰",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房A", green_mates:["林育詳"], taitung_need:false },
-  // 甜蜜雙人房B：周子翔(Box)、李承哲(Jebou)
-  { name:"周子翔", alias:"Box",       ferry_go:"台東→綠島 13:30（綠星2號 G21330）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房B", green_mates:["李承哲"], taitung_need:false },
-  { name:"李承哲", alias:"Jebou",     ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房B", green_mates:["周子翔"], taitung_need:false },
-  // 甜蜜雙人房C：趙偉志(石頭)、黃文廷(昂扣)
-  { name:"趙偉志", alias:"石頭",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房C", green_mates:["黃文廷"], taitung_need:true },
-  { name:"黃文廷", alias:"昂扣",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房C", green_mates:["趙偉志"], taitung_need:true },
+  { name:"八月", display:"八月", aliases:["八月"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["詩豪","雞腿","可樂","小晏","阿金"], taitung_need:true },
+  { name:"詩豪", display:"詩豪", aliases:["詩豪"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","雞腿","可樂","小晏","阿金"], taitung_need:true },
+  { name:"雞腿", display:"雞腿", aliases:["雞腿"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","可樂","小晏","阿金"], taitung_need:false },
+  { name:"可樂", display:"可樂", aliases:["可樂"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","雞腿","小晏","阿金"], taitung_need:false },
+  { name:"小晏", display:"小晏", aliases:["小晏"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","雞腿","可樂","阿金"], taitung_need:false },
+  { name:"阿金", display:"阿金", aliases:["阿金"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","雞腿","可樂","小晏"], taitung_need:true },
+  { name:"阿緯", display:"阿緯", aliases:["阿緯"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["小丞","阿哲","鐘元志"], taitung_need:true },
+  { name:"小丞", display:"小丞", aliases:["小丞"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["阿緯","阿哲","鐘元志"], taitung_need:false },
+  { name:"阿哲", display:"阿哲", aliases:["阿哲"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["阿緯","小丞","鐘元志"], taitung_need:true },
+  { name:"鐘元志", display:"鐘元志", aliases:["鐘元志"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["阿緯","小丞","阿哲"], taitung_need:false },
+  { name:"Neil", display:"Neil", aliases:["Neil"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["振瑋","大興","許凱"], taitung_need:false },
+  { name:"振瑋", display:"振瑋", aliases:["振瑋"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","大興","許凱"], taitung_need:false },
+  { name:"大興", display:"大興", aliases:["大興"], ferry_go:"台東→綠島 11:30（凱旋3號 K31130）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","振瑋","許凱"], taitung_need:false },
+  { name:"許凱", display:"許凱", aliases:["許凱","表哥"], ferry_go:"台東→綠島 11:30（凱旋3號 K31130）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","振瑋","大興"], taitung_need:false },
+  { name:"娜娜", display:"娜娜", aliases:["娜娜"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"雙人房", green_mates:["小白"], taitung_need:false },
+  { name:"小白", display:"小白", aliases:["小白"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"雙人房", green_mates:["娜娜"], taitung_need:false },
+  { name:"小竣", display:"小竣", aliases:["小竣"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小古","大大","和億","泉","珈佑"], taitung_need:false },
+  { name:"小古", display:"小古", aliases:["小古"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","大大","和億","泉","珈佑"], taitung_need:false },
+  { name:"大大", display:"大大", aliases:["大大"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","小古","和億","泉","珈佑"], taitung_need:true },
+  { name:"和億", display:"和億", aliases:["和億"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","小古","大大","泉","珈佑"], taitung_need:true },
+  { name:"泉", display:"泉", aliases:["泉"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","小古","大大","和億","珈佑"], taitung_need:false },
+  { name:"珈佑", display:"珈佑", aliases:["珈佑"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","小古","大大","和億","泉"], taitung_need:true },
+  { name:"貴智", display:"貴智", aliases:["貴智"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["奕翰","聖峰","Alvin","Felix","Pio"], taitung_need:false },
+  { name:"奕翰", display:"奕翰", aliases:["奕翰","小可愛"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","聖峰","Alvin","Felix","Pio"], taitung_need:false },
+  { name:"聖峰", display:"聖峰", aliases:["聖峰"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","奕翰","Alvin","Felix","Pio"], taitung_need:false },
+  { name:"Alvin", display:"Alvin", aliases:["Alvin"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","奕翰","聖峰","Felix","Pio"], taitung_need:true },
+  { name:"Felix", display:"Felix", aliases:["Felix"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","奕翰","聖峰","Alvin","Pio"], taitung_need:true },
+  { name:"Pio", display:"Pio", aliases:["Pio"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","奕翰","聖峰","Alvin","Felix"], taitung_need:true },
+  { name:"黑", display:"黑", aliases:["黑"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["煒晴","奕方","Volten","阿文","軒哥"], taitung_need:true },
+  { name:"煒晴", display:"煒晴", aliases:["煒晴"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["黑","奕方","Volten","阿文","軒哥"], taitung_need:true },
+  { name:"奕方", display:"奕方", aliases:["奕方"], ferry_go:"8/2 台東→綠島 07:30（天王星 S0730）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["黑","煒晴","Volten","阿文","軒哥"], taitung_need:false },
+  { name:"Volten", display:"Volten", aliases:["Volten","V"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["黑","煒晴","奕方","阿文","軒哥"], taitung_need:true },
+  { name:"阿文", display:"阿文", aliases:["阿文"], ferry_go:"台東→綠島 13:30（綠星2號 G21330）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["黑","煒晴","奕方","Volten","軒哥"], taitung_need:false },
+  { name:"軒哥", display:"軒哥", aliases:["軒哥"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["黑","煒晴","奕方","Volten","阿文"], taitung_need:true },
+  { name:"科諺", display:"科諺", aliases:["科諺"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["Jerry","CJ","阿廷"], taitung_need:true },
+  { name:"Jerry", display:"Jerry", aliases:["Jerry"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["科諺","CJ","阿廷"], taitung_need:true },
+  { name:"CJ", display:"CJ", aliases:["CJ"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["科諺","Jerry","阿廷"], taitung_need:true },
+  { name:"阿廷", display:"阿廷", aliases:["阿廷"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["科諺","Jerry","CJ"], taitung_need:false },
+  { name:"Alex", display:"Alex", aliases:["Alex","爸爸"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房A", green_mates:["阿彰"], taitung_need:true },
+  { name:"阿彰", display:"阿彰", aliases:["阿彰"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房A", green_mates:["Alex"], taitung_need:false },
+  { name:"Box", display:"Box", aliases:["Box"], ferry_go:"台東→綠島 13:30（綠星2號 G21330）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房B", green_mates:["Jebou"], taitung_need:false },
+  { name:"Jebou", display:"Jebou", aliases:["Jebou"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房B", green_mates:["Box"], taitung_need:false },
+  { name:"石頭", display:"石頭", aliases:["石頭"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房C", green_mates:["昂扣"], taitung_need:true },
+  { name:"昂扣", display:"昂扣", aliases:["昂扣"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房C", green_mates:["石頭"], taitung_need:true },
+  { name:"Jacky", display:"Jacky", aliases:["Jacky"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房A", green_mates:["瑋瑋"], taitung_need:true },
+  { name:"瑋瑋", display:"瑋瑋", aliases:["瑋瑋"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房A", green_mates:["Jacky"], taitung_need:true },
+  { name:"小任", display:"小任", aliases:["小任","暖燈"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房B", green_mates:["Allen"], taitung_need:true },
+  { name:"Allen", display:"Allen", aliases:["Allen"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房B", green_mates:["小任"], taitung_need:true },
 ];
 
 // ── 共用行程 ────────────────────────────────────────
@@ -481,7 +465,7 @@ const ITINERARY = [
 
 // ── 查詢邏輯 ─────────────────────────────────────────
 function matchScore(m, q) {
-  const fields = [m.name, m.alias].filter(Boolean);
+  const fields = m.aliases || [];
   for (const f of fields) {
     if (f === q) return 100;
     if (f.includes(q) || q.includes(f)) return 80;
@@ -521,7 +505,7 @@ function lookup() {
   suggest.innerHTML = '<div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:8px;">找到多筆結果，請選擇：</div>'
     + scored.map(({ m }) =>
         `<button class="suggest-item" onclick="pickPerson('${m.name}')">` +
-        `${m.name}${m.alias ? ` <span style='color:rgba(255,255,255,0.35);font-size:12px;'>（${m.alias}）</span>` : ''}` +
+        `${m.display}${m.aliases.length > 1 ? ` <span style='color:rgba(255,255,255,0.35);font-size:12px;'>（${m.aliases.slice(1).join(' / ')}）</span>` : ''}` +
         `</button>`
       ).join('');
   document.getElementById('result').style.display = 'none';
@@ -536,10 +520,11 @@ function pickPerson(name) {
 
 function renderResult(p) {
   // avatar
-  document.getElementById('avatarEl').textContent = p.alias ? p.alias[0] : p.name[0];
-  document.getElementById('nameEl').textContent = p.name;
+  document.getElementById('avatarEl').textContent = p.display ? p.display[0] : p.name[0];
+  document.getElementById('nameEl').textContent = p.display;
+  const extraAliases = p.aliases.slice(1);
   const metaParts = [];
-  if (p.alias) metaParts.push(p.alias);
+  if (extraAliases.length > 0) metaParts.push(extraAliases.join(' / '));
   metaParts.push(p.green_hotel);
   document.getElementById('metaEl').textContent = metaParts.join(' · ');
 
@@ -580,14 +565,8 @@ function renderResult(p) {
   const taitungHtml = p.taitung_need
     ? `<div class="room-name" style="color:rgba(255,255,255,0.3);font-style:italic;">配房待補</div><div class="room-type">7/31（五）晚 · 已登記需要</div>`
     : `<div class="room-tbd">不需台東住宿</div>`;
-  // 建立本名(綽號)對照
-  const ALIAS_MAP = {"賴昶佑": "八月", "林詩豪": "詩豪", "曾獻生": "雞腿", "郭旭東": "可樂", "林群晏": "小晏", "謝宗庭": "阿金", "葉竣銘": "小竣", "古名尊": "小古", "謝鈞任": "大大", "林和億": "和億", "謝紳泉": "泉", "周珈佑": "珈佑", "楊貴智": "貴智", "蘇奕翰": "奕翰", "孫聖峰": "聖峰", "劉家齊": "Alvin", "曾耀男": "Felix", "謝明哲": "Pio", "卓彥廷": "黑", "洪煒晴": "煒晴", "陳奕方": "奕方", "李任翔": "Volten", "陳泓文": "阿文", "吳政軒": "軒哥", "程科諺": "科諺", "施俊仰": "Jerry", "謝金融": "CJ", "陳瑞廷": "阿廷", "林承緯": "阿緯", "徐丞逸": "小丞", "周民哲": "阿哲", "鐘元志": "鐘元志", "曾振瑋": "振瑋", "石培鑫": "大興", "許凱証": "表哥", "林育詳": "Alex", "李啓彰": "阿彰", "周子翔": "Box", "李承哲": "Jebou", "趙偉志": "石頭", "黃文廷": "昂扣", "徐士清": "Jacky", "郭曜瑋": "瑋瑋", "許任廷": "小任", "吳艾倫": "Allen", "戴語絜": "娜娜", "白羽涵": "小白"};
-  function formatMate(n) {
-    const a = ALIAS_MAP[n];
-    return a && a !== n ? n + '(' + a + ')' : n;
-  }
-  const greenMatesHtml = p.green_mates && p.green_mates.length > 0
-    ? `<div class="room-mates">同房：${p.green_mates.map(formatMate).join('、')}</div>`
+    const greenMatesHtml = p.green_mates && p.green_mates.length > 0
+    ? `<div class="room-mates">同房：${p.green_mates.join('、')}</div>`
     : p.green_room && p.green_room !== '待補' ? `<div class="room-mates" style="color:rgba(255,255,255,0.25);">室友待補</div>` : '';
   const greenRoomHtml = p.green_room
     ? `<div class="room-name">${p.green_hotel}</div><div class="room-type">${p.green_room}</div>${greenMatesHtml}`

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 今夏辣一波綠島 🤿</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ocean: #0a4a6e;
+    --ocean-mid: #1a7a9a;
+    --ocean-light: #5bbcd6;
+    --foam: #e8f7fc;
+    --sand: #f5f0e8;
+    --sand-dark: #d4c9b0;
+    --coral: #e05a3a;
+    --coral-light: #f5c4b5;
+    --ink: #1a1a2e;
+    --muted: #7a8a9a;
+    --white: #ffffff;
+    --success: #2d8a5e;
+    --success-bg: #e6f5ee;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--ink);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND ── */
+  .bg-wrap {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(160deg, #0a1628 0%, #0a3a5a 50%, #0a2a1a 100%);
+    overflow: hidden;
+  }
+  .wave {
+    position: absolute; width: 200%; height: 200%;
+    border-radius: 45%;
+    animation: wave-spin linear infinite;
+    opacity: 0.04;
+  }
+  .wave-1 { background: var(--ocean-light); bottom: -80%; left: -50%; animation-duration: 18s; }
+  .wave-2 { background: #2dd4bf; bottom: -85%; left: -40%; animation-duration: 25s; animation-direction: reverse; }
+  .wave-3 { background: var(--ocean-mid); bottom: -90%; left: -60%; animation-duration: 32s; }
+  @keyframes wave-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* ── LAYOUT ── */
+  .page { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 0 1rem 4rem; }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 4rem 1rem 3rem;
+  }
+  .hero-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--ocean-light);
+    border: 1px solid rgba(91,188,214,0.4);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(28px, 6vw, 44px);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .hero h1 span { color: var(--ocean-light); }
+  .hero-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ── SEARCH BOX ── */
+  .search-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: blur(12px);
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  .search-label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .search-row { display: flex; gap: 8px; }
+  .search-row input {
+    flex: 1;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 15px;
+    color: var(--white);
+    font-family: 'Outfit', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-row input::placeholder { color: rgba(255,255,255,0.25); }
+  .search-row input:focus { border-color: var(--ocean-light); }
+  .search-btn {
+    background: var(--ocean-light);
+    color: var(--ink);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Outfit', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .search-btn:hover { background: #7dd4eb; }
+  .search-btn:active { transform: scale(0.97); }
+
+  .error-msg {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #f5a4a4;
+    display: none;
+  }
+
+  /* ── RESULT ── */
+  #result { margin-top: 2rem; display: none; }
+
+  .person-header {
+    display: flex; align-items: center; gap: 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--ocean-mid), var(--ocean-light));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 600; color: white;
+    font-family: 'Noto Serif TC', serif;
+    flex-shrink: 0;
+  }
+  .person-name { font-size: 20px; font-weight: 600; font-family: 'Noto Serif TC', serif; }
+  .person-meta { font-size: 13px; color: rgba(255,255,255,0.45); margin-top: 2px; font-family: 'DM Mono', monospace; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 1.25rem; }
+  .section-title {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ocean-light);
+    margin-bottom: 10px;
+    padding-left: 2px;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .card-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .card-row:last-child { border-bottom: none; }
+
+  .badge {
+    font-size: 11px; font-family: 'DM Mono', monospace;
+    padding: 4px 10px; border-radius: 8px;
+    font-weight: 500; white-space: nowrap; flex-shrink: 0;
+  }
+  .badge-go { background: rgba(91,188,214,0.15); color: var(--ocean-light); border: 1px solid rgba(91,188,214,0.3); }
+  .badge-back { background: rgba(224,90,58,0.15); color: #f0956f; border: 1px solid rgba(224,90,58,0.3); }
+  .badge-tbd { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.1); }
+
+  .row-main { font-size: 15px; font-weight: 500; }
+  .row-sub { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  .rooms-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  .room-cell {
+    padding: 16px 18px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    border-bottom: none;
+  }
+  .room-cell:last-child { border-right: none; }
+  .room-label { font-size: 11px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.35); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .room-name { font-size: 15px; font-weight: 500; }
+  .room-type { font-size: 12px; color: var(--ocean-light); margin-top: 3px; }
+  .room-tbd { font-size: 14px; color: rgba(255,255,255,0.25); font-style: italic; }
+  .room-mates { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 5px; }
+
+  /* ── ITINERARY ── */
+  .days-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+  .day-tab {
+    font-size: 12px; font-family: 'DM Mono', monospace;
+    padding: 6px 14px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: transparent; color: rgba(255,255,255,0.45);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .day-tab.active, .day-tab:hover {
+    background: var(--ocean-light); color: var(--ink);
+    border-color: var(--ocean-light); font-weight: 500;
+  }
+  .day-content { display: none; }
+  .day-content.active { display: block; }
+
+  .timeline { padding: 4px 0; }
+  .tl-item {
+    display: flex; gap: 16px;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    align-items: flex-start;
+  }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-time {
+    font-size: 12px; font-family: 'DM Mono', monospace;
+    color: var(--ocean-light); min-width: 44px; padding-top: 2px;
+    flex-shrink: 0;
+  }
+  .tl-dot-wrap { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; padding-top: 6px; }
+  .tl-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ocean-light); flex-shrink: 0; }
+  .tl-dot.special { background: var(--coral); width: 10px; height: 10px; }
+  .tl-line { width: 1px; flex: 1; background: rgba(255,255,255,0.1); min-height: 20px; margin-top: 4px; }
+  .tl-text { font-size: 14px; line-height: 1.5; }
+  .tl-text strong { color: var(--ocean-light); font-weight: 500; }
+  .tl-tag {
+    display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 6px;
+    margin-left: 6px; vertical-align: middle;
+    background: rgba(91,188,214,0.12); color: var(--ocean-light);
+    border: 1px solid rgba(91,188,214,0.2);
+  }
+  .tl-tag.event { background: rgba(224,90,58,0.12); color: #f0956f; border-color: rgba(224,90,58,0.2); }
+
+  .notice-box {
+    background: rgba(91,188,214,0.08);
+    border: 1px solid rgba(91,188,214,0.2);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* ── FOOTER / RESET ── */
+  .reset-btn {
+    display: block; width: 100%; margin-top: 2rem;
+    background: transparent; border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.35); border-radius: 12px;
+    padding: 12px; font-size: 13px; font-family: 'Outfit', sans-serif;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .reset-btn:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.6); }
+
+  .suggest-list {
+    margin-top: 10px; display: none;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 10px;
+  }
+  .suggest-item {
+    display: block; width: 100%;
+    background: transparent; border: none;
+    color: var(--white); font-family: 'Outfit', sans-serif;
+    font-size: 14px; text-align: left;
+    padding: 9px 12px; border-radius: 8px;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .suggest-item:hover { background: rgba(91,188,214,0.12); }
+</style>
+</head>
+<body>
+
+<div class="bg-wrap">
+  <div class="wave wave-1"></div>
+  <div class="wave wave-2"></div>
+  <div class="wave wave-3"></div>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-badge">2026 · 綠島 · 48 人</div>
+    <h1>今夏辣一波<span>綠島</span> 🤿</h1>
+    <p class="hero-sub">2026.08.01 — 08.04 · GREEN ISLAND</p>
+
+    <div class="search-card">
+      <span class="search-label">輸入本名，查看你的行程與船班</span>
+      <div class="search-row">
+        <input type="text" id="nameInput" placeholder="例：林詩豪" autocomplete="off" />
+        <button class="search-btn" onclick="lookup()">查詢 →</button>
+      </div>
+      <div class="error-msg" id="errMsg">找不到這個名字，請確認是否為報名時填寫的本名</div>
+      <div class="suggest-list" id="suggestList"></div>
+    </div>
+  </div>
+
+  <div id="result">
+    <div class="person-header">
+      <div class="avatar" id="avatarEl"></div>
+      <div>
+        <div class="person-name" id="nameEl"></div>
+        <div class="person-meta" id="metaEl"></div>
+      </div>
+    </div>
+
+    <!-- 船班 -->
+    <div class="section">
+      <div class="section-title">⛴ 船班資訊</div>
+      <div class="card" id="ferryCard"></div>
+    </div>
+
+    <!-- 住宿 -->
+    <div class="section">
+      <div class="section-title">🏨 住宿資訊</div>
+      <div class="card">
+        <div class="rooms-grid" id="roomsGrid"></div>
+      </div>
+    </div>
+
+    <!-- 行程 -->
+    <div class="section">
+      <div class="section-title">📅 行程總覽</div>
+      <div class="days-tabs" id="dayTabs"></div>
+      <div class="card" id="dayContents"></div>
+    </div>
+
+    <button class="reset-btn" onclick="resetView()">← 重新查詢</button>
+  </div>
+</div>
+
+<script>
+// ── 資料 ──────────────────────────────────────────────
+const MEMBERS = [
+  // ── 綠邑旅宿 ──
+  // 四人房A：林承緯(阿緯)、小丞、周民哲(阿哲)、鐘元志
+  { name:"林承緯", alias:"阿緯",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["徐丞逸","周民哲","鐘元志"], taitung_need:true },
+  { name:"徐丞逸", alias:"小丞",          ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["林承緯","周民哲","鐘元志"], taitung_need:false },
+  { name:"周民哲", alias:"阿哲",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["林承緯","徐丞逸","鐘元志"], taitung_need:true },
+  { name:"鐘元志", alias:"鐘元志",          ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["林承緯","徐丞逸","周民哲"], taitung_need:false },
+  // 六人房：賴昶佑(八月)、林詩豪(詩豪)、曾獻生(雞腿)、郭旭東(可樂)、林群晏(小晏)、謝宗庭(阿金)
+  { name:"賴昶佑", alias:"八月",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["林詩豪","曾獻生","郭旭東","林群晏","謝宗庭"], taitung_need:false },
+  { name:"林詩豪", alias:"詩豪",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["賴昶佑","曾獻生","郭旭東","林群晏","謝宗庭"], taitung_need:true },
+  { name:"曾獻生", alias:"雞腿",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["賴昶佑","林詩豪","郭旭東","林群晏","謝宗庭"], taitung_need:false },
+  { name:"郭旭東", alias:"可樂",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["賴昶佑","林詩豪","曾獻生","林群晏","謝宗庭"], taitung_need:false },
+  { name:"林群晏", alias:"小晏",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["賴昶佑","林詩豪","曾獻生","郭旭東","謝宗庭"], taitung_need:false },
+  { name:"謝宗庭", alias:"阿金",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["賴昶佑","林詩豪","曾獻生","郭旭東","林群晏"], taitung_need:true },
+  // 四人房B：Neil、曾振瑋(振瑋)、大興、許凱証(表哥)
+  { name:"Neil",   alias:"",          ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["曾振瑋","石培鑫","許凱証"], taitung_need:false },
+  { name:"曾振瑋", alias:"振瑋",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","石培鑫","許凱証"], taitung_need:false },
+  { name:"石培鑫",   alias:"大興",       ferry_go:"台東→綠島 11:30（凱旋3號 K31130）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","曾振瑋","許凱証"], taitung_need:false },
+  { name:"許凱証", alias:"表哥",      ferry_go:"台東→綠島 11:30（凱旋3號 K31130）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","曾振瑋","石培鑫"], taitung_need:false },
+  { name:"石培鑫", alias:"石培鑫",      ferry_go:"台東→綠島 11:30（凱旋3號 K31130）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"待補", green_mates:[], taitung_need:false },
+  // 雙人房：戴語絜(娜娜)、白羽涵(小白)
+  { name:"戴語絜", alias:"娜娜",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"雙人房", green_mates:["白羽涵"], taitung_need:false },
+  { name:"白羽涵", alias:"小白",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"雙人房", green_mates:["戴語絜"], taitung_need:false },
+
+  // ── 綠島九號精品 ──
+  // 六人房A：葉竣銘(小竣)、古名尊(小古)、謝鈞任(大大)、林和億(和億)、謝紳泉(泉)、周珈佑(珈佑)
+  { name:"葉竣銘", alias:"小竣",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["古名尊","謝鈞任","林和億","謝紳泉","周珈佑"], taitung_need:false },
+  { name:"古名尊", alias:"小古",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["葉竣銘","謝鈞任","林和億","謝紳泉","周珈佑"], taitung_need:false },
+  { name:"謝鈞任", alias:"大大",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["葉竣銘","古名尊","林和億","謝紳泉","周珈佑"], taitung_need:true },
+  { name:"林和億", alias:"和億",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["葉竣銘","古名尊","謝鈞任","謝紳泉","周珈佑"], taitung_need:true },
+  { name:"謝紳泉", alias:"泉",        ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["葉竣銘","古名尊","謝鈞任","林和億","周珈佑"], taitung_need:false },
+  { name:"周珈佑", alias:"珈佑",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["葉竣銘","古名尊","謝鈞任","林和億","謝紳泉"], taitung_need:true },
+  // 六人房B：楊貴智(貴智)、蘇奕翰(奕翰)、孫聖峰(聖峰)、劉家齊(Alvin)、曾耀男(Felix)、謝明哲(Pio)
+  { name:"楊貴智", alias:"貴智",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["蘇奕翰","孫聖峰","劉家齊","曾耀男","謝明哲"], taitung_need:false },
+  { name:"蘇奕翰", alias:"奕翰",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["楊貴智","孫聖峰","劉家齊","曾耀男","謝明哲"], taitung_need:false },
+  { name:"孫聖峰", alias:"聖峰",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["楊貴智","蘇奕翰","劉家齊","曾耀男","謝明哲"], taitung_need:false },
+  { name:"劉家齊", alias:"Alvin",     ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["楊貴智","蘇奕翰","孫聖峰","曾耀男","謝明哲"], taitung_need:true },
+  { name:"曾耀男", alias:"Felix",     ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["楊貴智","蘇奕翰","孫聖峰","劉家齊","謝明哲"], taitung_need:true },
+  { name:"謝明哲", alias:"Pio",       ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["楊貴智","蘇奕翰","孫聖峰","劉家齊","曾耀男"], taitung_need:true },
+  // 六人房C：卓彥廷(黑)、洪煒晴(煒晴)、陳奕方(奕方)、李任翔(Volten)、陳泓文(阿文)、吳政軒(軒哥)
+  { name:"卓彥廷", alias:"黑",        ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["洪煒晴","陳奕方","李任翔","陳泓文","吳政軒"], taitung_need:true },
+  { name:"洪煒晴", alias:"煒晴",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["卓彥廷","陳奕方","李任翔","陳泓文","吳政軒"], taitung_need:true },
+  { name:"陳奕方", alias:"奕方",      ferry_go:"8/2 台東→綠島 07:30（天王星 S0730）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["卓彥廷","洪煒晴","李任翔","陳泓文","吳政軒"], taitung_need:false },
+  { name:"李任翔", alias:"Volten / V",ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["卓彥廷","洪煒晴","陳奕方","陳泓文","吳政軒"], taitung_need:true },
+  { name:"陳泓文", alias:"阿文",      ferry_go:"台東→綠島 13:30（綠星2號 G21330）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["卓彥廷","洪煒晴","陳奕方","李任翔","吳政軒"], taitung_need:false },
+  { name:"吳政軒", alias:"軒哥",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["卓彥廷","洪煒晴","陳奕方","李任翔","陳泓文"], taitung_need:true },
+  // 四人房：程科諺(科諺)、施俊仰(Jerry)、謝金融(CJ)、陳瑞廷(阿廷)
+  { name:"程科諺", alias:"科諺",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["施俊仰","謝金融","陳瑞廷"], taitung_need:true },
+  { name:"施俊仰", alias:"Jerry",     ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["程科諺","謝金融","陳瑞廷"], taitung_need:true },
+  { name:"謝金融", alias:"CJ",        ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["程科諺","施俊仰","陳瑞廷"], taitung_need:true },
+  { name:"陳瑞廷", alias:"阿廷",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["程科諺","施俊仰","謝金融"], taitung_need:false },
+  // 標準雙人房A：徐士清(Jacky)、郭曜瑋(瑋瑋)
+  { name:"徐士清", alias:"Jacky",     ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房A", green_mates:["郭曜瑋"], taitung_need:true },
+  { name:"郭曜瑋", alias:"瑋瑋",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房A", green_mates:["徐士清"], taitung_need:true },
+  // 標準雙人房B：許任廷(小任)、吳艾倫(Allen)
+  { name:"許任廷", alias:"小任",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房B", green_mates:["吳艾倫"], taitung_need:true },
+  { name:"吳艾倫", alias:"Allen",     ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房B", green_mates:["許任廷"], taitung_need:true },
+  // 甜蜜雙人房A：林育詳(Alex)、李啓彰(阿彰)
+  { name:"林育詳", alias:"Alex",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房A", green_mates:["李啓彰"], taitung_need:true },
+  { name:"李啓彰", alias:"阿彰",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房A", green_mates:["林育詳"], taitung_need:false },
+  // 甜蜜雙人房B：周子翔(Box)、李承哲(Jebou)
+  { name:"周子翔", alias:"Box",       ferry_go:"台東→綠島 13:30（綠星2號 G21330）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房B", green_mates:["李承哲"], taitung_need:false },
+  { name:"李承哲", alias:"Jebou",     ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房B", green_mates:["周子翔"], taitung_need:false },
+  // 甜蜜雙人房C：趙偉志(石頭)、黃文廷(昂扣)
+  { name:"趙偉志", alias:"石頭",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房C", green_mates:["黃文廷"], taitung_need:true },
+  { name:"黃文廷", alias:"昂扣",      ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房C", green_mates:["趙偉志"], taitung_need:true },
+];
+
+// ── 共用行程 ────────────────────────────────────────
+const ITINERARY = [
+  {
+    day: "Day 0", date: "7/31（五）", label: "抵達台東",
+    taitung_only: true,  // 只有 taitung_need=true 的人才顯示
+    items: [
+      { time: "晚間", text: "抵達台東，各自 check-in", special: false },
+      { time: "晚間", text: "台東住宿 <span class='tl-tag'>待補</span>", special: false },
+      { time: "晚餐", text: "晚餐自理", special: false },
+    ]
+  },
+  {
+    day: "Day 1", date: "8/1（六）", label: "抵達綠島",
+    taitung_only: false,
+    items: [
+      { time: "早上", text: "🚐 台東火車站 → 富岡漁港（統一包車）<span class='tl-tag'>包車</span>", special: false, taitung_item: true },
+      { time: "上午", text: "依各自船班前往富岡漁港，搭船至綠島", special: false },
+      { time: "中午", text: "午餐自理", special: false },
+      { time: "下午", text: "抵達綠島、check-in 民宿", special: false },
+      { time: "下午", text: "🤿 下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：石朗十字架及郵筒 · 依當天浪況調整</span>", special: false },
+      { time: "晚餐", text: "晚餐自理", special: false },
+    ]
+  },
+  {
+    day: "Day 2", date: "8/2（日）", label: "潛水 + 晚會",
+    taitung_only: false,
+    items: [
+      { time: "上午", text: "🤿 上午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：柴口浮潛區燕魚郵筒 · 依當天浪況調整</span>", special: false },
+      { time: "中午", text: "午餐自理", special: false },
+      { time: "下午", text: "🤿 下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：溫泉港 · 依當天浪況調整</span>", special: false },
+      { time: "晚餐", text: "晚餐自理", special: false },
+      { time: "19:00", text: "🎉 晚會開始 <span class='tl-tag event'>特別活動</span>", special: true },
+      { time: "21:00", text: "晚會結束", special: false },
+    ]
+  },
+  {
+    day: "Day 3", date: "8/3（一）", label: "環島路跑接力",
+    taitung_only: false,
+    items: [
+      { time: "上午", text: "🤿 上午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：大白沙時光隧道 · 依當天浪況調整</span>", special: false },
+      { time: "中午", text: "午餐自理", special: false },
+      { time: "下午", text: "🤿 下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：將軍岩 · 依當天浪況調整</span>", special: false },
+      { time: "晚餐", text: "晚餐自理", special: false },
+      { time: "16:00", text: "🏃 環島路跑接力賽 <span class='tl-tag event'>自由參加</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>自由參加活動，歡迎揪隊一起跑</span>", special: true },
+    ]
+  },
+  {
+    day: "Day 4", date: "8/4（二）", label: "返程",
+    taitung_only: false,
+    items: [
+      { time: "上午", text: "退房整理行李", special: false },
+      { time: "各異", text: "依個人船班搭船返回台東富岡漁港", special: false },
+      { time: "備注", text: "回程時間每人不同，請確認個人船班", special: false },
+    ]
+  }
+];
+
+// ── 查詢邏輯 ─────────────────────────────────────────
+function matchScore(m, q) {
+  const fields = [m.name, m.alias].filter(Boolean);
+  for (const f of fields) {
+    if (f === q) return 100;
+    if (f.includes(q) || q.includes(f)) return 80;
+  }
+  const combined = fields.join('');
+  if (q.split('').every(ch => combined.includes(ch))) return 50;
+  return 0;
+}
+
+function lookup() {
+  const q = document.getElementById('nameInput').value.trim();
+  const err = document.getElementById('errMsg');
+  const suggest = document.getElementById('suggestList');
+  if (!q) return;
+
+  const scored = MEMBERS
+    .map(m => ({ m, score: matchScore(m, q) }))
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score);
+
+  if (scored.length === 0) {
+    err.style.display = 'block';
+    suggest.innerHTML = '';
+    suggest.style.display = 'none';
+    document.getElementById('result').style.display = 'none';
+    return;
+  }
+  err.style.display = 'none';
+
+  if (scored.length === 1 || scored[0].score === 100) {
+    suggest.style.display = 'none';
+    renderResult(scored[0].m);
+    return;
+  }
+
+  suggest.style.display = 'block';
+  suggest.innerHTML = '<div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:8px;">找到多筆結果，請選擇：</div>'
+    + scored.map(({ m }) =>
+        `<button class="suggest-item" onclick="pickPerson('${m.name}')">` +
+        `${m.name}${m.alias ? ` <span style='color:rgba(255,255,255,0.35);font-size:12px;'>（${m.alias}）</span>` : ''}` +
+        `</button>`
+      ).join('');
+  document.getElementById('result').style.display = 'none';
+}
+
+function pickPerson(name) {
+  const person = MEMBERS.find(m => m.name === name);
+  document.getElementById('suggestList').style.display = 'none';
+  document.getElementById('nameInput').value = name;
+  renderResult(person);
+}
+
+function renderResult(p) {
+  // avatar
+  document.getElementById('avatarEl').textContent = p.alias ? p.alias[0] : p.name[0];
+  document.getElementById('nameEl').textContent = p.name;
+  const metaParts = [];
+  if (p.alias) metaParts.push(p.alias);
+  metaParts.push(p.green_hotel);
+  document.getElementById('metaEl').textContent = metaParts.join(' · ');
+
+  // ferry
+  const fc = document.getElementById('ferryCard');
+  fc.innerHTML = `
+    <div class="card-row">
+      <span class="badge badge-go">去程</span>
+      <div>
+        <div class="row-main">${p.ferry_go}</div>
+        <div class="row-sub">富岡漁港出發，抵達綠島南寮港</div>
+      </div>
+    </div>
+    <div class="card-row">
+      <span class="badge badge-back">回程</span>
+      <div>
+        <div class="row-main">${p.ferry_back}</div>
+        <div class="row-sub">綠島南寮港出發，返回富岡漁港</div>
+      </div>
+    </div>
+    <div class="card-row">
+      <span class="badge badge-tbd">接送</span>
+      <div>
+        <div class="row-main">8/1 台東火車站 → 富岡漁港</div>
+        <div class="row-sub">白牌車接送，時間待補</div>
+      </div>
+    </div>
+    <div class="card-row">
+      <span class="badge badge-tbd">接送</span>
+      <div>
+        <div class="row-main">8/4 富岡漁港 → 台東火車站</div>
+        <div class="row-sub">白牌車接送，時間待補</div>
+      </div>
+    </div>`;
+
+  // rooms
+  const rg = document.getElementById('roomsGrid');
+  const taitungHtml = p.taitung_need
+    ? `<div class="room-name" style="color:rgba(255,255,255,0.3);font-style:italic;">配房待補</div><div class="room-type">7/31（五）晚 · 已登記需要</div>`
+    : `<div class="room-tbd">不需台東住宿</div>`;
+  // 建立本名(綽號)對照
+  const ALIAS_MAP = {"賴昶佑": "八月", "林詩豪": "詩豪", "曾獻生": "雞腿", "郭旭東": "可樂", "林群晏": "小晏", "謝宗庭": "阿金", "葉竣銘": "小竣", "古名尊": "小古", "謝鈞任": "大大", "林和億": "和億", "謝紳泉": "泉", "周珈佑": "珈佑", "楊貴智": "貴智", "蘇奕翰": "奕翰", "孫聖峰": "聖峰", "劉家齊": "Alvin", "曾耀男": "Felix", "謝明哲": "Pio", "卓彥廷": "黑", "洪煒晴": "煒晴", "陳奕方": "奕方", "李任翔": "Volten", "陳泓文": "阿文", "吳政軒": "軒哥", "程科諺": "科諺", "施俊仰": "Jerry", "謝金融": "CJ", "陳瑞廷": "阿廷", "林承緯": "阿緯", "徐丞逸": "小丞", "周民哲": "阿哲", "鐘元志": "鐘元志", "曾振瑋": "振瑋", "石培鑫": "大興", "許凱証": "表哥", "林育詳": "Alex", "李啓彰": "阿彰", "周子翔": "Box", "李承哲": "Jebou", "趙偉志": "石頭", "黃文廷": "昂扣", "徐士清": "Jacky", "郭曜瑋": "瑋瑋", "許任廷": "小任", "吳艾倫": "Allen", "戴語絜": "娜娜", "白羽涵": "小白"};
+  function formatMate(n) {
+    const a = ALIAS_MAP[n];
+    return a && a !== n ? n + '(' + a + ')' : n;
+  }
+  const greenMatesHtml = p.green_mates && p.green_mates.length > 0
+    ? `<div class="room-mates">同房：${p.green_mates.map(formatMate).join('、')}</div>`
+    : p.green_room && p.green_room !== '待補' ? `<div class="room-mates" style="color:rgba(255,255,255,0.25);">室友待補</div>` : '';
+  const greenRoomHtml = p.green_room
+    ? `<div class="room-name">${p.green_hotel}</div><div class="room-type">${p.green_room}</div>${greenMatesHtml}`
+    : `<div class="room-name">${p.green_hotel}</div><div class="room-type" style="color:rgba(255,255,255,0.3);">配房待補</div>`;
+  rg.innerHTML = `
+    <div class="room-cell">
+      <div class="room-label">台東 · 7/31</div>
+      ${taitungHtml}
+    </div>
+    <div class="room-cell">
+      <div class="room-label">綠島 · 8/1–8/4</div>
+      ${greenRoomHtml}
+    </div>`;
+
+  // itinerary
+  const tabsEl = document.getElementById('dayTabs');
+  const contentsEl = document.getElementById('dayContents');
+  tabsEl.innerHTML = '';
+  contentsEl.innerHTML = '';
+
+  // 過濾行程：D0 只對 taitung_need=true 顯示；D1 包車項目同
+  const visibleDays = ITINERARY.filter(day => {
+    if (day.taitung_only && !p.taitung_need) return false;
+    return true;
+  });
+
+  visibleDays.forEach((day, i) => {
+    const tab = document.createElement('button');
+    tab.className = 'day-tab' + (i === 0 ? ' active' : '');
+    tab.textContent = day.day + ' ' + day.date;
+    tab.onclick = () => switchDay(i);
+    tabsEl.appendChild(tab);
+
+    const dc = document.createElement('div');
+    dc.className = 'day-content' + (i === 0 ? ' active' : '');
+    dc.id = 'day-' + i;
+
+    // 過濾 D1 包車項目：只對 taitung_need=true 顯示
+    const visibleItems = day.items.filter(item => {
+      if (item.taitung_item && !p.taitung_need) return false;
+      return true;
+    });
+
+    let itemsHtml = visibleItems.map((item, j) => {
+      const isLast = j === visibleItems.length - 1;
+      return `<div class="tl-item">
+        <div class="tl-time">${item.time}</div>
+        <div class="tl-dot-wrap">
+          <div class="tl-dot${item.special ? ' special' : ''}"></div>
+          ${!isLast ? '<div class="tl-line"></div>' : ''}
+        </div>
+        <div class="tl-text">${item.text}</div>
+      </div>`;
+    }).join('');
+
+    dc.innerHTML = `<div class="timeline">${itemsHtml}</div>`;
+    contentsEl.appendChild(dc);
+  });
+
+  document.getElementById('result').style.display = 'block';
+  document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function switchDay(idx) {
+  document.querySelectorAll('.day-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+  document.querySelectorAll('.day-content').forEach((c, i) => c.classList.toggle('active', i === idx));
+}
+
+function resetView() {
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('nameInput').value = '';
+  document.getElementById('errMsg').style.display = 'none';
+  document.getElementById('suggestList').style.display = 'none';
+  document.getElementById('suggestList').innerHTML = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('nameInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') lookup();
+});
+</script>
+</body>
+</html>

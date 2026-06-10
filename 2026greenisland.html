@@ -262,13 +262,14 @@
   .room-mates { font-size: 12px; color: rgba(255,255,255,0.75); margin-top: 5px; }
 
   /* ── ITINERARY ── */
-  .days-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+  .days-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: nowrap; }
   .day-tab {
     font-size: 12px; font-family: 'DM Mono', monospace;
-    padding: 6px 14px; border-radius: 10px;
+    padding: 6px 0; border-radius: 10px;
     border: 1px solid rgba(255,255,255,0.15);
     background: transparent; color: rgba(255,255,255,0.5);
     cursor: pointer; transition: all 0.15s;
+    flex: 1; text-align: center;
   }
   .day-tab.active, .day-tab:hover {
     background: #1a9bbf; color: #fff;
@@ -379,13 +380,13 @@
 
     <!-- 船班 -->
     <div class="section">
-      <div class="section-title">⛴ 船班資訊</div>
+      <div class="section-title">船班資訊</div>
       <div class="card" id="ferryCard"></div>
     </div>
 
     <!-- 住宿 -->
     <div class="section">
-      <div class="section-title">🏨 住宿資訊</div>
+      <div class="section-title">住宿資訊</div>
       <div class="card">
         <div class="rooms-grid" id="roomsGrid"></div>
       </div>
@@ -393,7 +394,7 @@
 
     <!-- 行程 -->
     <div class="section">
-      <div class="section-title">📅 行程總覽</div>
+      <div class="section-title">行程總覽</div>
       <div class="days-tabs" id="dayTabs"></div>
       <div class="card" id="dayContents"></div>
     </div>
@@ -417,18 +418,18 @@ const MEMBERS = [
   { name:"鐘元志", display:"鐘元志", aliases:["鐘元志"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["阿緯","小丞","阿哲"], taitung_need:false },
   { name:"Neil", display:"Neil", aliases:["Neil"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["振瑋","大興","許凱"], taitung_need:false },
   { name:"振瑋", display:"振瑋", aliases:["振瑋"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","大興","許凱"], taitung_need:false },
-  { name:"大興", display:"大興", aliases:["大興"], ferry_go:"台東→綠島 11:30（凱旋3號 K31130）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","振瑋","許凱"], taitung_need:false },
-  { name:"許凱", display:"許凱", aliases:["許凱","表哥"], ferry_go:"台東→綠島 11:30（凱旋3號 K31130）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","振瑋","大興"], taitung_need:false },
+  { name:"大興", display:"大興", aliases:["大興"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","振瑋","許凱"], taitung_need:false },
+  { name:"許凱", display:"許凱", aliases:["許凱","表哥"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","振瑋","大興"], taitung_need:false },
   { name:"娜娜", display:"娜娜", aliases:["娜娜"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"雙人房", green_mates:["小白"], taitung_need:false },
-  { name:"小白", display:"小白", aliases:["小白"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"雙人房", green_mates:["娜娜"], taitung_need:false },
+  { name:"小白", display:"小白", aliases:["小白"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"雙人房", green_mates:["娜娜"], taitung_need:true },
   { name:"小竣", display:"小竣", aliases:["小竣"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小古","大大","和億","泉","珈佑"], taitung_need:false },
   { name:"小古", display:"小古", aliases:["小古"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","大大","和億","泉","珈佑"], taitung_need:false },
   { name:"大大", display:"大大", aliases:["大大"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","小古","和億","泉","珈佑"], taitung_need:true },
-  { name:"和億", display:"和億", aliases:["和億"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","小古","大大","泉","珈佑"], taitung_need:true },
+  { name:"和億", display:"和億", aliases:["和億","八月的小寶"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","小古","大大","泉","珈佑"], taitung_need:true },
   { name:"泉", display:"泉", aliases:["泉"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","小古","大大","和億","珈佑"], taitung_need:false },
   { name:"珈佑", display:"珈佑", aliases:["珈佑"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","小古","大大","和億","泉"], taitung_need:true },
   { name:"貴智", display:"貴智", aliases:["貴智"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["奕翰","聖峰","Alvin","Felix","Pio"], taitung_need:false },
-  { name:"奕翰", display:"奕翰", aliases:["奕翰","小可愛"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","聖峰","Alvin","Felix","Pio"], taitung_need:false },
+  { name:"奕翰", display:"奕翰", aliases:["奕翰","小可愛"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","聖峰","Alvin","Felix","Pio"], taitung_need:true },
   { name:"聖峰", display:"聖峰", aliases:["聖峰"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","奕翰","Alvin","Felix","Pio"], taitung_need:false },
   { name:"Alvin", display:"Alvin", aliases:["Alvin"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","奕翰","聖峰","Felix","Pio"], taitung_need:true },
   { name:"Felix", display:"Felix", aliases:["Felix"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","奕翰","聖峰","Alvin","Pio"], taitung_need:true },
@@ -442,7 +443,7 @@ const MEMBERS = [
   { name:"科諺", display:"科諺", aliases:["科諺"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["Jerry","CJ","阿廷"], taitung_need:true },
   { name:"Jerry", display:"Jerry", aliases:["Jerry"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["科諺","CJ","阿廷"], taitung_need:true },
   { name:"CJ", display:"CJ", aliases:["CJ"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["科諺","Jerry","阿廷"], taitung_need:true },
-  { name:"阿廷", display:"阿廷", aliases:["阿廷"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["科諺","Jerry","CJ"], taitung_need:false },
+  { name:"阿廷", display:"阿廷", aliases:["阿廷","廷"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["科諺","Jerry","CJ"], taitung_need:false },
   { name:"Alex", display:"Alex", aliases:["Alex","爸爸"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房A", green_mates:["阿彰"], taitung_need:true },
   { name:"阿彰", display:"阿彰", aliases:["阿彰"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房A", green_mates:["Alex"], taitung_need:false },
   { name:"Box", display:"Box", aliases:["Box"], ferry_go:"台東→綠島 13:30（綠星2號 G21330）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房B", green_mates:["Jebou"], taitung_need:false },
@@ -470,11 +471,11 @@ const ITINERARY = [
     day: "Day 1", date: "8/1（六）", label: "抵達綠島",
     taitung_only: false,
     items: [
-      { time: "早上", text: "🚐 台東火車站 → 富岡漁港（統一包車）<span class='tl-tag'>包車</span>", special: false, taitung_item: true },
+      { time: "早上", text: "台東火車站 → 富岡漁港（統一包車）<span class='tl-tag'>包車</span>", special: false, taitung_item: true },
       { time: "上午", text: "依各自船班前往富岡漁港，搭船至綠島", special: false },
       { time: "中午", text: "午餐自理", special: false },
       { time: "下午", text: "抵達綠島、check-in 民宿", special: false },
-      { time: "下午", text: "🤿 下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：石朗十字架及郵筒 · 依當天浪況調整</span>", special: false },
+      { time: "下午", text: "下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：石朗十字架及郵筒 · 依當天浪況調整</span>", special: false },
       { time: "晚餐", text: "晚餐自理", special: false },
     ]
   },
@@ -482,11 +483,11 @@ const ITINERARY = [
     day: "Day 2", date: "8/2（日）", label: "潛水 + 晚會",
     taitung_only: false,
     items: [
-      { time: "上午", text: "🤿 上午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：柴口浮潛區燕魚郵筒 · 依當天浪況調整</span>", special: false },
+      { time: "上午", text: "上午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：柴口浮潛區燕魚郵筒 · 依當天浪況調整</span>", special: false },
       { time: "中午", text: "午餐自理", special: false },
-      { time: "下午", text: "🤿 下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：溫泉港 · 依當天浪況調整</span>", special: false },
+      { time: "下午", text: "下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：溫泉港 · 依當天浪況調整</span>", special: false },
       { time: "晚餐", text: "晚餐自理", special: false },
-      { time: "19:00", text: "🎉 晚會開始 <span class='tl-tag event'>特別活動</span>", special: true },
+      { time: "19:00", text: "晚會開始 <span class='tl-tag event'>特別活動</span>", special: true },
       { time: "21:00", text: "晚會結束", special: false },
     ]
   },
@@ -494,11 +495,11 @@ const ITINERARY = [
     day: "Day 3", date: "8/3（一）", label: "環島路跑接力",
     taitung_only: false,
     items: [
-      { time: "上午", text: "🤿 上午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：大白沙時光隧道 · 依當天浪況調整</span>", special: false },
+      { time: "上午", text: "上午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：大白沙時光隧道 · 依當天浪況調整</span>", special: false },
       { time: "中午", text: "午餐自理", special: false },
-      { time: "下午", text: "🤿 下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：將軍岩 · 依當天浪況調整</span>", special: false },
+      { time: "下午", text: "下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：將軍岩 · 依當天浪況調整</span>", special: false },
       { time: "晚餐", text: "晚餐自理", special: false },
-      { time: "16:00", text: "🏃 環島路跑接力賽 <span class='tl-tag event'>自由參加</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>自由參加活動，歡迎揪隊一起跑</span>", special: true },
+      { time: "16:00", text: "環島路跑接力賽 <span class='tl-tag event'>自由參加</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>自由參加活動，歡迎揪隊一起跑</span>", special: true },
     ]
   },
   {
@@ -645,7 +646,7 @@ function renderResult(p) {
   visibleDays.forEach((day, i) => {
     const tab = document.createElement('button');
     tab.className = 'day-tab' + (i === 0 ? ' active' : '');
-    tab.textContent = day.day + ' ' + day.date;
+    tab.textContent = day.day;
     tab.onclick = () => switchDay(i);
     tabsEl.appendChild(tab);
 
@@ -671,7 +672,7 @@ function renderResult(p) {
       </div>`;
     }).join('');
 
-    dc.innerHTML = `<div class="timeline">${itemsHtml}</div>`;
+    dc.innerHTML = `<div style="font-size:11px;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.45);padding:10px 18px 2px;letter-spacing:0.06em;">${day.date} · ${day.label}</div><div class="timeline">${itemsHtml}</div>`;
     contentsEl.appendChild(dc);
   });
 

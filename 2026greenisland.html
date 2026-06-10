@@ -305,6 +305,25 @@
     border: 1px solid rgba(77,212,240,0.4);
   }
   .tl-tag.event { background: rgba(224,90,58,0.12); color: #f0956f; border-color: rgba(224,90,58,0.2); }
+  .dive-spot {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; color: rgba(255,255,255,0.55);
+    margin-top: 5px;
+  }
+  .dive-spot a {
+    display: inline-flex; align-items: center; gap: 4px;
+    color: #7de8ff; text-decoration: none;
+    font-size: 12px; padding: 3px 8px;
+    background: rgba(0,100,160,0.35);
+    border: 1px solid rgba(77,212,240,0.3);
+    border-radius: 6px; transition: all 0.15s;
+  }
+  .dive-spot a:hover {
+    background: rgba(0,100,160,0.55);
+    border-color: rgba(77,212,240,0.6);
+    color: #b8eeff;
+  }
+  .dive-spot a svg { flex-shrink: 0; }
 
   .notice-box {
     background: rgba(91,188,214,0.08);
@@ -406,7 +425,7 @@
 <script>
 // ── 資料 ──────────────────────────────────────────────
 const MEMBERS = [
-  { name:"八月", display:"八月", aliases:["八月"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["詩豪","雞腿","可樂","小晏","阿金"], taitung_need:true },
+  { name:"八月", display:"八月", aliases:["八月","August"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["詩豪","雞腿","可樂","小晏","阿金"], taitung_need:true },
   { name:"詩豪", display:"詩豪", aliases:["詩豪"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","雞腿","可樂","小晏","阿金"], taitung_need:true },
   { name:"雞腿", display:"雞腿", aliases:["雞腿"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","可樂","小晏","阿金"], taitung_need:false },
   { name:"可樂", display:"可樂", aliases:["可樂"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","雞腿","小晏","阿金"], taitung_need:false },
@@ -475,7 +494,7 @@ const ITINERARY = [
       { time: "上午", text: "依各自船班前往富岡漁港，搭船至綠島", special: false },
       { time: "中午", text: "午餐自理", special: false },
       { time: "下午", text: "抵達綠島、check-in 民宿", special: false },
-      { time: "下午", text: "下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：石朗十字架及郵筒 · 依當天浪況調整</span>", special: false },
+      { time: "14:30", text: "下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：<div class='dive-spot'><a href='https://www.google.com.tw/maps/place/%E6%B5%B7%E5%BA%95%E9%83%B5%E7%AD%92%EF%BC%86%E6%B5%B7%E6%B4%8B%E4%B9%8B%E5%BF%83/@22.6551853,121.4731669,17z' target='_blank'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>石朗十字架及郵筒</a></div><span style='font-size:12px;color:rgba(255,255,255,0.35);'>（依當天浪況調整）</span></span>", special: false },
       { time: "晚餐", text: "晚餐自理", special: false },
     ]
   },
@@ -483,9 +502,10 @@ const ITINERARY = [
     day: "Day 2", date: "8/2（日）", label: "潛水 + 晚會",
     taitung_only: false,
     items: [
-      { time: "上午", text: "上午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：柴口浮潛區燕魚郵筒 · 依當天浪況調整</span>", special: false },
+      { time: "早晨", text: "看日出 · <a href='https://www.google.com.tw/maps/place/%E6%9C%9D%E6%97%A5%E6%BA%AB%E6%B3%89/@22.6366667,121.5052778,15z' target='_blank' style='color:#7de8ff;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'>綠島朝日溫泉</a> <span class='tl-tag'>自行組隊</span>", special: false },
+      { time: "10:00", text: "上午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：<div class='dive-spot'><a href='https://www.google.com.tw/maps/place/%E6%9F%B4%E5%8F%A3%E6%B5%AE%E6%BD%9B%E5%8D%80/@22.6766438,121.4828764,15z' target='_blank'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>柴口浮潛區燕魚郵筒</a></div><span style='font-size:12px;color:rgba(255,255,255,0.35);'>（依當天浪況調整）</span></span>", special: false },
       { time: "中午", text: "午餐自理", special: false },
-      { time: "下午", text: "下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：溫泉港 · 依當天浪況調整</span>", special: false },
+      { time: "14:30", text: "下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：<div class='dive-spot'><a href='https://www.google.com.tw/maps/search/綠島溫泉港/@22.672,121.488,15z' target='_blank'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>溫泉港</a></div><span style='font-size:12px;color:rgba(255,255,255,0.35);'>（依當天浪況調整）</span></span>", special: false },
       { time: "晚餐", text: "晚餐自理", special: false },
       { time: "19:00", text: "晚會開始 <span class='tl-tag event'>特別活動</span>", special: true },
       { time: "21:00", text: "晚會結束", special: false },
@@ -495,9 +515,10 @@ const ITINERARY = [
     day: "Day 3", date: "8/3（一）", label: "環島路跑接力",
     taitung_only: false,
     items: [
-      { time: "上午", text: "上午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：大白沙時光隧道 · 依當天浪況調整</span>", special: false },
+      { time: "早晨", text: "看日出 · <a href='https://www.google.com.tw/maps/place/%E6%9C%9D%E6%97%A5%E6%BA%AB%E6%B3%89/@22.6366667,121.5052778,15z' target='_blank' style='color:#7de8ff;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'>綠島朝日溫泉</a> <span class='tl-tag'>自行組隊</span>", special: false },
+      { time: "10:00", text: "上午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：<div class='dive-spot'><a href='https://www.google.com.tw/maps/search/大白沙+綠島/@22.657,121.497,15z' target='_blank'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>大白沙時光隧道</a></div><span style='font-size:12px;color:rgba(255,255,255,0.35);'>（依當天浪況調整）</span></span>", special: false },
       { time: "中午", text: "午餐自理", special: false },
-      { time: "下午", text: "下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：將軍岩 · 依當天浪況調整</span>", special: false },
+      { time: "14:30", text: "下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：<div class='dive-spot'><a href='https://www.google.com.tw/maps/search/將軍岩+綠島/@22.643,121.493,15z' target='_blank'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>將軍岩</a></div><span style='font-size:12px;color:rgba(255,255,255,0.35);'>（依當天浪況調整）</span></span>", special: false },
       { time: "晚餐", text: "晚餐自理", special: false },
       { time: "16:00", text: "環島路跑接力賽 <span class='tl-tag event'>自由參加</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>自由參加活動，歡迎揪隊一起跑</span>", special: true },
     ]
@@ -506,6 +527,7 @@ const ITINERARY = [
     day: "Day 4", date: "8/4（二）", label: "返程",
     taitung_only: false,
     items: [
+      { time: "早晨", text: "看日出 · <a href='https://www.google.com.tw/maps/place/%E6%9C%9D%E6%97%A5%E6%BA%AB%E6%B3%89/@22.6366667,121.5052778,15z' target='_blank' style='color:#7de8ff;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'>綠島朝日溫泉</a> <span class='tl-tag'>自行組隊</span>", special: false },
       { time: "上午", text: "退房整理行李", special: false },
       { time: "各異", text: "依個人船班搭船返回台東富岡漁港", special: false },
       { time: "備注", text: "回程時間每人不同，請確認個人船班", special: false },
@@ -619,8 +641,8 @@ function renderResult(p) {
     ? `<div class="room-mates">同房：${p.green_mates.join('、')}</div>`
     : p.green_room && p.green_room !== '待補' ? `<div class="room-mates" style="color:rgba(255,255,255,0.25);">室友待補</div>` : '';
   const greenRoomHtml = p.green_room
-    ? `<div class="room-name">${p.green_hotel}</div><div class="room-type">${p.green_room}</div>${greenMatesHtml}`
-    : `<div class="room-name">${p.green_hotel}</div><div class="room-type" style="color:rgba(255,255,255,0.3);">配房待補</div>`;
+    ? `<div class="room-name">${p.green_hotel === '綠邑旅宿' ? `<a href='https://maps.app.goo.gl/cd93PMxvoXEERoea8' target='_blank' style='color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>綠邑旅宿</a>` : p.green_hotel === '綠島九號精品' ? `<a href='https://maps.app.goo.gl/oXp8sYuBKR3T5AtTA' target='_blank' style='color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>綠島九號精品</a>` : p.green_hotel}</div><div class="room-type">${p.green_room}</div>${greenMatesHtml}`
+    : `<div class="room-name">${p.green_hotel === '綠邑旅宿' ? `<a href='https://maps.app.goo.gl/cd93PMxvoXEERoea8' target='_blank' style='color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>綠邑旅宿</a>` : p.green_hotel === '綠島九號精品' ? `<a href='https://maps.app.goo.gl/oXp8sYuBKR3T5AtTA' target='_blank' style='color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>綠島九號精品</a>` : p.green_hotel}</div><div class="room-type" style="color:rgba(255,255,255,0.3);">配房待補</div>`;
   rg.innerHTML = `
     <div class="room-cell">
       <div class="room-label">台東 · 7/31</div>

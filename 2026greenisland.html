@@ -642,6 +642,20 @@
     transition: width 0.3s ease; width: 0%;
   }
 
+  /* ── VISIT COUNTER ── */
+  .visit-footer {
+    display: flex; align-items: center; justify-content: center; gap: 0;
+    margin: 2rem 0 1rem;
+    padding: 12px 24px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+  }
+  .visit-item { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 0 24px; }
+  .visit-label { font-size: 10px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); }
+  .visit-num { font-size: 22px; font-family: 'DM Mono', monospace; font-weight: 600; color: #4dd4f0; letter-spacing: 0.05em; }
+  .visit-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.1); }
+
   /* ── DIVE MAP ── */
   .dive-map-outer { margin-top: 2rem; }
   .dive-map-label {
@@ -703,6 +717,19 @@
   <div class="dive-map-outer">
     <div class="dive-map-label">🤿 &nbsp;綠島潛點全覽地圖</div>
     <div id="diveMap"></div>
+  </div>
+
+  <!-- 頁尾瀏覽計數 -->
+  <div class="visit-footer">
+    <div class="visit-item">
+      <span class="visit-label">總瀏覽人次</span>
+      <span class="visit-num" id="counterTotal">—</span>
+    </div>
+    <div class="visit-divider"></div>
+    <div class="visit-item">
+      <span class="visit-label">今日瀏覽</span>
+      <span class="visit-num" id="counterToday">—</span>
+    </div>
   </div>
 
   <div id="result">
@@ -794,6 +821,12 @@
     </div>
     <button class="reset-btn" onclick="resetView()">← 重新查詢</button>
   </div>
+
+  <!-- 版權 -->
+  <div style="text-align:center;padding:24px 0 16px;font-size:11px;font-family:'DM Mono',monospace;letter-spacing:0.12em;color:rgba(255,255,255,0.2);">
+    © 2026 &nbsp;August Lai &nbsp;八月 &nbsp;·&nbsp; 今夏辣一波綠島
+  </div>
+
 </div>
 
 <script>
@@ -1254,6 +1287,25 @@ function updateCount(key) {
 // renderChecklist 在 renderResult 末尾呼叫，完成後更新總進度
 const _origRenderChecklist = renderChecklist;
 renderChecklist = function() { _origRenderChecklist(); updateTotalProgress(); };
+
+// ── ⑧ 瀏覽計數器 ─────────────────────────────────────
+(async function initVisitCounter() {
+  const NS = 'greendao2026';
+  const today = new Date().toISOString().slice(0, 10).replace(/-/g, ''); // e.g. 20260801
+  try {
+    // 總計 & 今日：每次載入都計入，重新整理也算
+    const [totalRes, todayRes] = await Promise.all([
+      fetch(`https://api.counterapi.dev/v1/${NS}/total/up`),
+      fetch(`https://api.counterapi.dev/v1/${NS}/day-${today}/up`)
+    ]);
+    const [totalData, todayData] = await Promise.all([totalRes.json(), todayRes.json()]);
+    document.getElementById('counterTotal').textContent = Number(totalData.count).toLocaleString();
+    document.getElementById('counterToday').textContent = Number(todayData.count).toLocaleString();
+  } catch (e) {
+    document.getElementById('counterTotal').textContent = '—';
+    document.getElementById('counterToday').textContent = '—';
+  }
+})();
 </script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
@@ -1436,5 +1488,6 @@ function toggleFerryOverview() {
   });
 })();
 </script>
+
 </body>
 </html>

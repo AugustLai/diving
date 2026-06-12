@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2026 今夏辣一波綠島 🤿</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
   :root {
     --ocean: #0a5c7a;
@@ -137,7 +138,6 @@
     backdrop-filter: blur(12px);
     border-radius: 20px;
     padding: 2rem;
-    backdrop-filter: blur(12px);
     max-width: 420px;
     margin: 0 auto;
   }
@@ -367,13 +367,38 @@
 
   /* ── Check List ── */
   .checklist-section { margin-top: 1.25rem; }
-  .checklist-group { margin-bottom: 1rem; }
+  .checklist-group { margin-bottom: 6px; }
   .checklist-group-title {
-    font-size: 11px; font-family: 'DM Mono', monospace;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(255,255,255,0.5); margin-bottom: 8px; padding-left: 2px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px; font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    padding: 10px 14px; border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer; user-select: none;
+    transition: background 0.15s;
   }
-  .checklist-items { display: flex; flex-wrap: wrap; gap: 8px; }
+  .checklist-group-title:hover { background: rgba(255,255,255,0.1); }
+  .checklist-group-title .cl-arrow {
+    font-size: 10px; color: rgba(255,255,255,0.35);
+    transition: transform 0.2s;
+  }
+  .checklist-group-title .cl-count {
+    font-size: 11px; color: rgba(255,255,255,0.3);
+    margin-left: 8px;
+  }
+  .checklist-group-title.open .cl-arrow { transform: rotate(180deg); }
+  .checklist-group-title.open { border-radius: 10px 10px 0 0; border-bottom-color: transparent; }
+  .checklist-items {
+    display: none; flex-wrap: wrap; gap: 8px;
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1); border-top: none;
+    border-radius: 0 0 10px 10px;
+    margin-bottom: 2px;
+  }
+  .checklist-items.open { display: flex; }
   .check-item {
     display: flex; align-items: center; gap: 7px;
     background: rgba(255,255,255,0.06);
@@ -458,6 +483,177 @@
     cursor: pointer; transition: background 0.15s;
   }
   .suggest-item:hover { background: rgba(77,212,240,0.12); }
+
+  /* ── COUNTDOWN ── */
+  .countdown-wrap {
+    display: flex; gap: 12px; justify-content: center;
+    margin: 1.5rem 0 2rem;
+  }
+  .cd-unit {
+    text-align: center;
+    background: rgba(0,50,90,0.35);
+    border: 1px solid rgba(77,212,240,0.35);
+    border-radius: 14px; padding: 12px 16px;
+    min-width: 72px; backdrop-filter: blur(8px);
+  }
+  .cd-num {
+    font-size: 30px; font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    color: #4dd4f0;
+    text-shadow: 0 0 24px rgba(77,212,240,0.6);
+    line-height: 1;
+  }
+  .cd-label {
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    font-family: 'DM Mono', monospace; margin-top: 4px;
+  }
+  .cd-gone-msg {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 18px; color: #4dd4f0;
+    text-shadow: 0 0 20px rgba(77,212,240,0.5);
+    margin: 1rem 0 2rem; letter-spacing: 0.05em;
+  }
+
+  /* ── WEATHER ── */
+  .weather-section { margin-bottom: 1.25rem; }
+  .weather-scroll {
+    display: flex; gap: 10px; overflow-x: auto;
+    padding-bottom: 6px;
+    scrollbar-width: thin; scrollbar-color: rgba(77,212,240,0.3) transparent;
+  }
+  .weather-scroll::-webkit-scrollbar { height: 4px; }
+  .weather-scroll::-webkit-scrollbar-thumb { background: rgba(77,212,240,0.3); border-radius: 4px; }
+  .weather-card {
+    flex-shrink: 0;
+    background: rgba(0,40,70,0.4);
+    border: 1px solid rgba(77,212,240,0.2);
+    border-radius: 14px; padding: 14px 12px;
+    text-align: center; min-width: 88px;
+    backdrop-filter: blur(8px);
+  }
+  .weather-card.trip-day {
+    border-color: rgba(255,140,56,0.6);
+    background: rgba(60,30,0,0.35);
+  }
+  .weather-date { font-size: 11px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.5); margin-bottom: 2px; }
+  .weather-trip-badge { font-size: 9px; color: #ff8c38; letter-spacing: 0.05em; margin-bottom: 2px; }
+  .weather-icon { font-size: 24px; line-height: 1.3; margin: 3px 0; }
+  .weather-desc { font-size: 11px; color: rgba(255,255,255,0.6); margin-bottom: 5px; }
+  .weather-temp { font-size: 13px; font-weight: 500; color: #fff; }
+  .weather-temp span { color: rgba(255,255,255,0.4); font-size: 11px; }
+  .weather-wave { font-size: 11px; color: #7de8ff; margin-top: 4px; font-family: 'DM Mono', monospace; }
+  .weather-wind { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+  /* ── FERRY OVERVIEW ── */
+  .ferry-overview { margin-bottom: 1.25rem; }
+  .ferry-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 11px; font-family: 'DM Mono', monospace;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    padding: 12px 16px; border-radius: 14px;
+    background: rgba(0,40,70,0.35);
+    border: 1px solid rgba(77,212,240,0.2);
+    cursor: pointer; user-select: none; transition: all 0.15s;
+  }
+  .ferry-toggle:hover { background: rgba(0,55,95,0.45); }
+  .ferry-toggle .fo-arrow { font-size: 10px; transition: transform 0.2s; }
+  .ferry-toggle.open .fo-arrow { transform: rotate(180deg); }
+  .ferry-toggle.open { border-radius: 14px 14px 0 0; border-bottom-color: transparent; }
+  .ferry-body {
+    display: none;
+    background: rgba(0,40,70,0.3);
+    border: 1px solid rgba(77,212,240,0.2); border-top: none;
+    border-radius: 0 0 14px 14px; padding: 14px 16px;
+  }
+  .ferry-body.open { display: block; }
+  .ferry-group-label {
+    font-size: 10px; font-family: 'DM Mono', monospace;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); margin: 14px 0 6px;
+  }
+  .ferry-group-label:first-child { margin-top: 0; }
+  .ferry-row-ov {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .ferry-row-ov:last-child { border-bottom: none; }
+  .fo-badge {
+    font-size: 10px; font-family: 'DM Mono', monospace;
+    padding: 3px 8px; border-radius: 6px;
+    white-space: nowrap; flex-shrink: 0; margin-top: 2px;
+  }
+  .fo-badge.go { background: rgba(0,100,160,0.4); color: #b8eeff; border: 1px solid rgba(77,212,240,0.45); }
+  .fo-badge.back { background: rgba(224,90,58,0.15); color: #f0956f; border: 1px solid rgba(224,90,58,0.3); }
+  .fo-ferry-name { font-size: 13px; font-weight: 500; }
+  .fo-count { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; font-family: 'DM Mono', monospace; }
+  .fo-names { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .fo-name-tag {
+    font-size: 11px; padding: 2px 7px; border-radius: 6px;
+    background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .fo-name-tag.fo-leader {
+    background: rgba(255,200,40,0.15); color: #ffe066;
+    border: 1px solid rgba(255,200,40,0.4);
+    font-weight: 600;
+  }
+  .fo-name-tag.fo-deputy {
+    background: rgba(100,200,255,0.12); color: #90d8ff;
+    border: 1px solid rgba(100,200,255,0.35);
+    font-weight: 600;
+  }
+  .ferry-combo-group {
+    flex-direction: column; gap: 8px;
+  }
+  .ferry-combo-header {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  }
+  .ferry-combo-header > div { display: flex; align-items: center; gap: 6px; }
+  .ferry-combo-divider {
+    font-size: 10px; color: rgba(255,255,255,0.25); margin: 0 2px;
+  }
+
+  /* ── CHECKLIST PROGRESS ── */
+  .cl-progress-wrap {
+    margin-bottom: 14px; padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .cl-progress-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .cl-progress-title {
+    font-size: 12px; font-family: 'DM Mono', monospace;
+    color: rgba(255,255,255,0.5); letter-spacing: 0.08em;
+  }
+  .cl-progress-count {
+    font-size: 13px; font-family: 'DM Mono', monospace;
+    color: #4dd4f0; font-weight: 500;
+  }
+  .cl-progress-bar-bg {
+    height: 6px; border-radius: 3px;
+    background: rgba(255,255,255,0.08); overflow: hidden;
+  }
+  .cl-progress-bar-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, #1a9bbf, #4dd4f0);
+    transition: width 0.3s ease; width: 0%;
+  }
+
+  /* ── DIVE MAP ── */
+  .dive-map-outer { margin-top: 2rem; }
+  .dive-map-label {
+    font-size: 11px; font-family: 'DM Mono', monospace;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.6); margin-bottom: 10px; padding-left: 2px;
+  }
+  #diveMap {
+    width: 100%; height: 300px;
+    border-radius: 16px; overflow: hidden;
+    border: 1px solid rgba(77,212,240,0.2);
+  }
 </style>
 </head>
 <body>
@@ -473,6 +669,7 @@
     <div class="hero-badge">2026 · 綠島 · 48 人</div>
     <h1>今夏辣一波<span>綠島</span></h1>
     <p class="hero-sub">2026.08.01 — 08.04 · GREEN ISLAND</p>
+    <div id="countdownWrap"></div>
 
     <div class="search-card">
       <span class="search-label">輸入綽號，查看你的行程與船班</span>
@@ -480,9 +677,32 @@
         <input type="text" id="nameInput" placeholder="例：阿緯、八月、詩豪" autocomplete="off" />
         <button class="search-btn" onclick="lookup()">查詢 →</button>
       </div>
-      <div class="error-msg" id="errMsg">找不到這個名字，請確認是否為報名時填寫的本名</div>
+      <div class="error-msg" id="errMsg">找不到這個綽號，請確認後重新輸入</div>
       <div class="suggest-list" id="suggestList"></div>
     </div>
+  </div>
+
+  <!-- 天氣預報 -->
+  <div class="weather-section">
+    <div class="section-title">🌊 綠島天氣預報</div>
+    <div class="weather-scroll" id="weatherCards">
+      <div class="notice-box" style="width:100%;flex-shrink:0;">載入天氣中…</div>
+    </div>
+  </div>
+
+  <!-- 全員船班總覽 -->
+  <div class="ferry-overview">
+    <div class="ferry-toggle" id="ferryToggle" onclick="toggleFerryOverview()">
+      <span>🚢 &nbsp;全員船班分布</span>
+      <span class="fo-arrow">▼</span>
+    </div>
+    <div class="ferry-body" id="ferryBody"></div>
+  </div>
+
+  <!-- 潛點全覽地圖（永遠顯示） -->
+  <div class="dive-map-outer">
+    <div class="dive-map-label">🤿 &nbsp;綠島潛點全覽地圖</div>
+    <div id="diveMap"></div>
   </div>
 
   <div id="result">
@@ -520,29 +740,53 @@
     <div class="section checklist-section">
       <div class="section-title">行前清單</div>
       <div class="card" style="padding:1.25rem;">
+        <div class="cl-progress-wrap">
+          <div class="cl-progress-header">
+            <span class="cl-progress-title">整體打包進度</span>
+            <span class="cl-progress-count" id="totalProgressCount">0 / 0</span>
+          </div>
+          <div class="cl-progress-bar-bg">
+            <div class="cl-progress-bar-fill" id="totalProgressBar"></div>
+          </div>
+        </div>
 
         <div class="checklist-group">
-          <div class="checklist-group-title">潛水用品</div>
+          <div class="checklist-group-title" onclick="toggleCL(this)">
+            <span>潛水用品 <span class="cl-count" id="cnt-dive"></span></span>
+            <span class="cl-arrow">▼</span>
+          </div>
           <div class="checklist-items" id="cl-dive"></div>
         </div>
 
         <div class="checklist-group">
-          <div class="checklist-group-title">藥品</div>
+          <div class="checklist-group-title" onclick="toggleCL(this)">
+            <span>藥品 <span class="cl-count" id="cnt-med"></span></span>
+            <span class="cl-arrow">▼</span>
+          </div>
           <div class="checklist-items" id="cl-med"></div>
         </div>
 
         <div class="checklist-group">
-          <div class="checklist-group-title">衣物</div>
+          <div class="checklist-group-title" onclick="toggleCL(this)">
+            <span>衣物 <span class="cl-count" id="cnt-clothes"></span></span>
+            <span class="cl-arrow">▼</span>
+          </div>
           <div class="checklist-items" id="cl-clothes"></div>
         </div>
 
         <div class="checklist-group">
-          <div class="checklist-group-title">生活用品</div>
+          <div class="checklist-group-title" onclick="toggleCL(this)">
+            <span>生活用品 <span class="cl-count" id="cnt-daily"></span></span>
+            <span class="cl-arrow">▼</span>
+          </div>
           <div class="checklist-items" id="cl-daily"></div>
         </div>
 
-        <div class="checklist-group" style="margin-bottom:0">
-          <div class="checklist-group-title">環島跑步組</div>
+        <div class="checklist-group">
+          <div class="checklist-group-title" onclick="toggleCL(this)">
+            <span>環島跑步組 <span class="cl-count" id="cnt-run"></span></span>
+            <span class="cl-arrow">▼</span>
+          </div>
           <div class="checklist-items" id="cl-run"></div>
         </div>
 
@@ -559,17 +803,17 @@ const MEMBERS = [
   { name:"詩豪", display:"詩豪", aliases:["詩豪"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","雞腿","可樂","小晏","阿金"], taitung_need:true },
   { name:"雞腿", display:"雞腿", aliases:["雞腿"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","可樂","小晏","阿金"], taitung_need:false },
   { name:"可樂", display:"可樂", aliases:["可樂"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","雞腿","小晏","阿金"], taitung_need:false },
-  { name:"小晏", display:"小晏", aliases:["小晏"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","雞腿","可樂","阿金"], taitung_need:false },
+  { name:"小晏", display:"小晏", aliases:["小晏"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","雞腿","可樂","阿金"], taitung_need:true },
   { name:"阿金", display:"阿金", aliases:["阿金"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","雞腿","可樂","小晏"], taitung_need:true },
   { name:"阿緯", display:"阿緯", aliases:["阿緯"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["小丞","阿哲","鐘元志"], taitung_need:true },
   { name:"小丞", display:"小丞", aliases:["小丞"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["阿緯","阿哲","鐘元志"], taitung_need:false },
   { name:"阿哲", display:"阿哲", aliases:["阿哲"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["阿緯","小丞","鐘元志"], taitung_need:true },
-  { name:"鐘元志", display:"鐘元志", aliases:["鐘元志"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["阿緯","小丞","阿哲"], taitung_need:false },
-  { name:"Neil", display:"Neil", aliases:["Neil"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["振瑋","大興","許凱"], taitung_need:false },
-  { name:"振瑋", display:"振瑋", aliases:["振瑋"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","大興","許凱"], taitung_need:false },
-  { name:"大興", display:"大興", aliases:["大興"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","振瑋","許凱"], taitung_need:false },
-  { name:"許凱", display:"許凱", aliases:["許凱","表哥"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["Neil","振瑋","大興"], taitung_need:false },
-  { name:"娜娜", display:"娜娜", aliases:["娜娜"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"雙人房", green_mates:["小白"], taitung_need:false },
+  { name:"鐘元志", display:"鐘元志", aliases:["鐘元志"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["阿緯","小丞","阿哲"], taitung_need:true },
+  { name:"阿亮", display:"阿亮", aliases:["阿亮"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"六人房C", green_mates:["黑","奕方","Volten","阿文","軒哥"], taitung_need:true },
+  { name:"振瑋", display:"振瑋", aliases:["振瑋"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["煒晴","大興","許凱"], taitung_need:false },
+  { name:"大興", display:"大興", aliases:["大興"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["煒晴","振瑋","許凱"], taitung_need:true },
+  { name:"許凱", display:"許凱", aliases:["許凱","表哥"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 12:30（綠星2號 G21230）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["煒晴","振瑋","大興"], taitung_need:true },
+  { name:"娜娜", display:"娜娜", aliases:["娜娜"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"雙人房", green_mates:["小白"], taitung_need:true },
   { name:"小白", display:"小白", aliases:["小白"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"雙人房", green_mates:["娜娜"], taitung_need:true },
   { name:"小竣", display:"小竣", aliases:["小竣"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小古","大大","和億","泉","珈佑"], taitung_need:false },
   { name:"小古", display:"小古", aliases:["小古"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","大大","和億","泉","珈佑"], taitung_need:false },
@@ -577,32 +821,32 @@ const MEMBERS = [
   { name:"和億", display:"和億", aliases:["和億","八月的小寶"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","小古","大大","泉","珈佑"], taitung_need:true },
   { name:"泉", display:"泉", aliases:["泉"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","小古","大大","和億","珈佑"], taitung_need:false },
   { name:"珈佑", display:"珈佑", aliases:["珈佑"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房A", green_mates:["小竣","小古","大大","和億","泉"], taitung_need:true },
-  { name:"貴智", display:"貴智", aliases:["貴智"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["奕翰","聖峰","Alvin","Felix","Pio"], taitung_need:false },
-  { name:"奕翰", display:"奕翰", aliases:["奕翰","小可愛"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","聖峰","Alvin","Felix","Pio"], taitung_need:true },
-  { name:"聖峰", display:"聖峰", aliases:["聖峰"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","奕翰","Alvin","Felix","Pio"], taitung_need:false },
-  { name:"Alvin", display:"Alvin", aliases:["Alvin"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","奕翰","聖峰","Felix","Pio"], taitung_need:true },
-  { name:"Felix", display:"Felix", aliases:["Felix"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","奕翰","聖峰","Alvin","Pio"], taitung_need:true },
-  { name:"Pio", display:"Pio", aliases:["Pio"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房B", green_mates:["貴智","奕翰","聖峰","Alvin","Felix"], taitung_need:true },
-  { name:"黑", display:"黑", aliases:["黑"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["煒晴","奕方","Volten","阿文","軒哥"], taitung_need:true },
-  { name:"煒晴", display:"煒晴", aliases:["煒晴"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["黑","奕方","Volten","阿文","軒哥"], taitung_need:true },
-  { name:"奕方", display:"奕方", aliases:["奕方"], ferry_go:"8/2 台東→綠島 07:30（天王星 S0730）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["黑","煒晴","Volten","阿文","軒哥"], taitung_need:false },
-  { name:"Volten", display:"Volten", aliases:["Volten","V"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["黑","煒晴","奕方","阿文","軒哥"], taitung_need:true },
-  { name:"阿文", display:"阿文", aliases:["阿文"], ferry_go:"台東→綠島 13:30（綠星2號 G21330）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["黑","煒晴","奕方","Volten","軒哥"], taitung_need:false },
-  { name:"軒哥", display:"軒哥", aliases:["軒哥"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"六人房C", green_mates:["黑","煒晴","奕方","Volten","阿文"], taitung_need:true },
-  { name:"科諺", display:"科諺", aliases:["科諺"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["Jerry","CJ","阿廷"], taitung_need:true },
-  { name:"Jerry", display:"Jerry", aliases:["Jerry"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["科諺","CJ","阿廷"], taitung_need:true },
-  { name:"CJ", display:"CJ", aliases:["CJ"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["科諺","Jerry","阿廷"], taitung_need:true },
-  { name:"阿廷", display:"阿廷", aliases:["阿廷","廷"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"四人房", green_mates:["科諺","Jerry","CJ"], taitung_need:false },
-  { name:"Alex", display:"Alex", aliases:["Alex","爸爸"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房A", green_mates:["阿彰"], taitung_need:true },
-  { name:"阿彰", display:"阿彰", aliases:["阿彰"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房A", green_mates:["Alex"], taitung_need:false },
-  { name:"Box", display:"Box", aliases:["Box"], ferry_go:"台東→綠島 13:30（綠星2號 G21330）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房B", green_mates:["Jebou"], taitung_need:false },
-  { name:"Jebou", display:"Jebou", aliases:["Jebou"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房B", green_mates:["Box"], taitung_need:false },
-  { name:"石頭", display:"石頭", aliases:["石頭"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房C", green_mates:["昂扣"], taitung_need:true },
-  { name:"昂扣", display:"昂扣", aliases:["昂扣"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品", green_room:"甜蜜雙人房C", green_mates:["石頭"], taitung_need:true },
-  { name:"Jacky", display:"Jacky", aliases:["Jacky"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房A", green_mates:["瑋瑋"], taitung_need:true },
-  { name:"瑋瑋", display:"瑋瑋", aliases:["瑋瑋"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房A", green_mates:["Jacky"], taitung_need:true },
-  { name:"小任", display:"小任", aliases:["小任","暖燈"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房B", green_mates:["Allen"], taitung_need:true },
-  { name:"Allen", display:"Allen", aliases:["Allen"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品", green_room:"標準雙人房B", green_mates:["小任"], taitung_need:true },
+  { name:"貴智", display:"貴智", aliases:["貴智"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"六人房B", green_mates:["奕翰","聖峰","Alvin","Felix","Pio"], taitung_need:true },
+  { name:"奕翰", display:"奕翰", aliases:["奕翰","小可愛"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"六人房B", green_mates:["貴智","聖峰","Alvin","Felix","Pio"], taitung_need:true },
+  { name:"聖峰", display:"聖峰", aliases:["聖峰"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"六人房B", green_mates:["貴智","奕翰","Alvin","Felix","Pio"], taitung_need:true },
+  { name:"Alvin", display:"Alvin", aliases:["Alvin"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品渡假村", green_room:"六人房B", green_mates:["貴智","奕翰","聖峰","Felix","Pio"], taitung_need:true },
+  { name:"Felix", display:"Felix", aliases:["Felix"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"六人房B", green_mates:["貴智","奕翰","聖峰","Alvin","Pio"], taitung_need:true },
+  { name:"Pio", display:"Pio", aliases:["Pio"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"六人房B", green_mates:["貴智","奕翰","聖峰","Alvin","Felix"], taitung_need:true },
+  { name:"黑", display:"黑", aliases:["黑"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"六人房C", green_mates:["奕方","Volten","阿文","軒哥","阿亮"], taitung_need:true },
+  { name:"煒晴", display:"煒晴", aliases:["煒晴"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房B", green_mates:["振瑋","大興","許凱"], taitung_need:true },
+  { name:"奕方", display:"奕方", aliases:["奕方"], ferry_go:"8/2 台東→綠島 07:30（天王星 S0730）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"六人房C", green_mates:["黑","Volten","阿文","軒哥","阿亮"], taitung_need:false },
+  { name:"Volten", display:"Volten", aliases:["Volten","V"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"六人房C", green_mates:["黑","奕方","阿文","軒哥","阿亮"], taitung_need:true },
+  { name:"阿文", display:"阿文", aliases:["阿文"], ferry_go:"台東→綠島 13:30（綠星2號 G21330）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"六人房C", green_mates:["黑","奕方","Volten","軒哥","阿亮"], taitung_need:false },
+  { name:"軒哥", display:"軒哥", aliases:["軒哥"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"六人房C", green_mates:["黑","奕方","Volten","阿文","阿亮"], taitung_need:true },
+  { name:"科諺", display:"科諺", aliases:["科諺"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"四人房", green_mates:["Jerry","CJ","阿廷"], taitung_need:true },
+  { name:"Jerry", display:"Jerry", aliases:["Jerry"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"四人房", green_mates:["科諺","CJ","阿廷"], taitung_need:true },
+  { name:"CJ", display:"CJ", aliases:["CJ"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"四人房", green_mates:["科諺","Jerry","阿廷"], taitung_need:true },
+  { name:"阿廷", display:"阿廷", aliases:["阿廷","廷"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"四人房", green_mates:["科諺","Jerry","CJ"], taitung_need:true },
+  { name:"Alex", display:"Alex", aliases:["Alex","爸爸"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"甜蜜雙人房A", green_mates:["阿彰"], taitung_need:true },
+  { name:"阿彰", display:"阿彰", aliases:["阿彰"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"甜蜜雙人房A", green_mates:["Alex"], taitung_need:true },
+  { name:"Box", display:"Box", aliases:["Box"], ferry_go:"台東→綠島 13:30（綠星2號 G21330）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"甜蜜雙人房B", green_mates:["Jebou"], taitung_need:false },
+  { name:"Jebou", display:"Jebou", aliases:["Jebou"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"甜蜜雙人房B", green_mates:["Box"], taitung_need:false },
+  { name:"石頭", display:"石頭", aliases:["石頭"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品渡假村", green_room:"甜蜜雙人房C", green_mates:["昂扣"], taitung_need:true },
+  { name:"昂扣", display:"昂扣", aliases:["昂扣"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 10:30（天王星 S1030）", green_hotel:"綠島九號精品渡假村", green_room:"甜蜜雙人房C", green_mates:["石頭"], taitung_need:true },
+  { name:"Jacky", display:"Jacky", aliases:["Jacky"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"標準雙人房A", green_mates:["瑋瑋"], taitung_need:true },
+  { name:"瑋瑋", display:"瑋瑋", aliases:["瑋瑋"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"標準雙人房A", green_mates:["Jacky"], taitung_need:true },
+  { name:"小任", display:"小任", aliases:["小任","暖燈"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"標準雙人房B", green_mates:["Allen"], taitung_need:true },
+  { name:"Allen", display:"Allen", aliases:["Allen"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠島九號精品渡假村", green_room:"標準雙人房B", green_mates:["小任"], taitung_need:true },
 ];
 
 // ── 共用行程 ────────────────────────────────────────
@@ -621,7 +865,7 @@ const ITINERARY = [
     taitung_only: false,
     items: [
       { time: "早上", text: "台東火車站 → 富岡漁港（統一包車）<span class='tl-tag'>包車</span>", special: false, taitung_item: true },
-      { time: "上午", text: "依各自船班前往富岡漁港，搭船至綠島", special: false },
+      { time: "上午", text: "依各自船班前往富岡漁港，搭船至綠島", special: false, is_ferry_item: true },
       { time: "中午", text: "午餐自理", special: false },
       { time: "下午", text: "抵達綠島、check-in 民宿", special: false },
       { time: "14:30", text: "下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：{{SPOT:石朗十字架及郵筒}}<span style='font-size:12px;color:rgba(255,255,255,0.35);'>（依當天浪況調整）</span></span>", special: false },
@@ -649,8 +893,8 @@ const ITINERARY = [
       { time: "10:00", text: "上午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：{{SPOT:大白沙時光隧道}}<span style='font-size:12px;color:rgba(255,255,255,0.35);'>（依當天浪況調整）</span></span>", special: false },
       { time: "中午", text: "午餐自理", special: false },
       { time: "14:30", text: "下午潛水 <span class='tl-tag'>潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：{{SPOT:將軍岩}}<span style='font-size:12px;color:rgba(255,255,255,0.35);'>（依當天浪況調整）</span></span>", special: false },
-      { time: "晚餐", text: "晚餐自理", special: false },
       { time: "16:00", text: "環島路跑接力賽 <span class='tl-tag event'>自由參加</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>自由參加活動，歡迎揪隊一起跑</span>", special: true },
+      { time: "晚餐", text: "晚餐自理", special: false },
     ]
   },
   {
@@ -659,8 +903,7 @@ const ITINERARY = [
     items: [
       { time: "早晨", text: "看日出 · <a href='https://www.google.com.tw/maps/place/%E6%9C%9D%E6%97%A5%E6%BA%AB%E6%B3%89/@22.6366667,121.5052778,15z' target='_blank' style='color:#7de8ff;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'>綠島朝日溫泉</a> <span class='tl-tag'>自行組隊</span>", special: false },
       { time: "上午", text: "退房整理行李", special: false },
-      { time: "各異", text: "依個人船班搭船返回台東富岡漁港", special: false },
-      { time: "備注", text: "回程時間每人不同，請確認個人船班", special: false },
+      { time: "各異", text: "依個人船班搭船返回台東富岡漁港", special: false, is_ferry_back_item: true },
     ]
   }
 ];
@@ -771,8 +1014,8 @@ function renderResult(p) {
     ? `<div class="room-mates">同房：${p.green_mates.join('、')}</div>`
     : p.green_room && p.green_room !== '待補' ? `<div class="room-mates" style="color:rgba(255,255,255,0.25);">室友待補</div>` : '';
   const greenRoomHtml = p.green_room
-    ? `<div class="room-name">${p.green_hotel === '綠邑旅宿' ? `<a href='https://maps.app.goo.gl/cd93PMxvoXEERoea8' target='_blank' style='color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>綠邑旅宿</a>` : p.green_hotel === '綠島九號精品' ? `<a href='https://maps.app.goo.gl/oXp8sYuBKR3T5AtTA' target='_blank' style='color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>綠島九號精品</a>` : p.green_hotel}</div><div class="room-type">${p.green_room}</div>${greenMatesHtml}`
-    : `<div class="room-name">${p.green_hotel === '綠邑旅宿' ? `<a href='https://maps.app.goo.gl/cd93PMxvoXEERoea8' target='_blank' style='color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>綠邑旅宿</a>` : p.green_hotel === '綠島九號精品' ? `<a href='https://maps.app.goo.gl/oXp8sYuBKR3T5AtTA' target='_blank' style='color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>綠島九號精品</a>` : p.green_hotel}</div><div class="room-type" style="color:rgba(255,255,255,0.3);">配房待補</div>`;
+    ? `<div class="room-name">${p.green_hotel === '綠邑旅宿' ? `<a href='https://maps.app.goo.gl/cd93PMxvoXEERoea8' target='_blank' style='color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>綠邑旅宿</a>` : p.green_hotel === '綠島九號精品渡假村' ? `<a href='https://maps.app.goo.gl/oXp8sYuBKR3T5AtTA' target='_blank' style='color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>綠島九號精品</a>` : p.green_hotel}</div><div class="room-type">${p.green_room}</div>${greenMatesHtml}`
+    : `<div class="room-name">${p.green_hotel === '綠邑旅宿' ? `<a href='https://maps.app.goo.gl/cd93PMxvoXEERoea8' target='_blank' style='color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>綠邑旅宿</a>` : p.green_hotel === '綠島九號精品渡假村' ? `<a href='https://maps.app.goo.gl/oXp8sYuBKR3T5AtTA' target='_blank' style='color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'><svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>綠島九號精品</a>` : p.green_hotel}</div><div class="room-type" style="color:rgba(255,255,255,0.3);">配房待補</div>`;
   rg.innerHTML = `
     <div class="room-cell">
       <div class="room-label">台東 · 7/31</div>
@@ -806,21 +1049,52 @@ function renderResult(p) {
     dc.className = 'day-content' + (i === 0 ? ' active' : '');
     dc.id = 'day-' + i;
 
+    // 8/2 搭船者特殊處理（ferry_go 含 "8/2"）
+    const isDay2Arrival = p.ferry_go.includes('8/2');
+
     // 過濾 D1 包車項目：只對 taitung_need=true 顯示
-    const visibleItems = day.items.filter(item => {
+    let visibleItems = day.items.filter(item => {
       if (item.taitung_item && !p.taitung_need) return false;
       return true;
     });
+
+    // 8/2 搭船者：Day 2 頂部注入船班資訊
+    if (isDay2Arrival && day.day === 'Day 2') {
+      const timeMatch = p.ferry_go.match(/(\d{2}:\d{2})/);
+      const ferryTime = timeMatch ? timeMatch[1] : '上午';
+      visibleItems = [
+        {
+          time: ferryTime,
+          text: `搭乘 <span style="color:#4dd4f0;font-weight:600;">${p.ferry_go}</span><br><span style="font-size:12px;color:rgba(255,255,255,0.4);">富岡漁港出發 → 綠島南寮港</span>`,
+          special: false,
+          _injected: true
+        },
+        ...visibleItems
+      ];
+    }
 
     let itemsHtml = visibleItems.map((item, j) => {
       const isLast = j === visibleItems.length - 1;
       // 把 {{SPOT:名稱}} 轉成可點擊按鈕
       const mapIcon = `<svg width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' style='margin-right:3px'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>`;
-      const renderedText = item.text.replace(/\{\{SPOT:([^}]+)\}\}/g, (_, name) =>
+      // 個人化：船班行程自動帶入個人船票（非 8/2 搭船者）
+      let rawText = item.text;
+      let timeLabel = item.time;
+      if (item.is_ferry_item && !isDay2Arrival) {
+        const timeMatch = p.ferry_go.match(/(\d{2}:\d{2})/);
+        if (timeMatch) timeLabel = timeMatch[1];
+        rawText = `搭乘 <span style="color:#4dd4f0;font-weight:600;">${p.ferry_go}</span><br><span style="font-size:12px;color:rgba(255,255,255,0.4);">富岡漁港出發 → 綠島南寮港</span>`;
+      }
+      if (item.is_ferry_back_item) {
+        const timeMatch = p.ferry_back.match(/(\d{2}:\d{2})/);
+        if (timeMatch) timeLabel = timeMatch[1];
+        rawText = `搭乘 <span style="color:#4dd4f0;font-weight:600;">${p.ferry_back}</span><br><span style="font-size:12px;color:rgba(255,255,255,0.4);">綠島南寮港出發 → 富岡漁港</span>`;
+      }
+      const renderedText = rawText.replace(/\{\{SPOT:([^}]+)\}\}/g, (_, name) =>
         `<button class='spot-btn' data-spot='${name}'>${mapIcon}${name}</button>`
       );
       return `<div class="tl-item">
-        <div class="tl-time">${item.time}</div>
+        <div class="tl-time">${timeLabel}</div>
         <div class="tl-dot-wrap">
           <div class="tl-dot${item.special ? ' special' : ''}"></div>
           ${!isLast ? '<div class="tl-line"></div>' : ''}
@@ -829,7 +1103,14 @@ function renderResult(p) {
       </div>`;
     }).join('');
 
-    dc.innerHTML = `<div style="font-size:11px;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.45);padding:10px 18px 2px;letter-spacing:0.06em;">${day.date} · ${day.label}</div><div class="timeline">${itemsHtml}</div>`;
+    // 8/2 搭船者：Day 1 反灰 + 提示橫幅
+    const isGrayedDay = isDay2Arrival && day.day === 'Day 1';
+    const grayBanner = isGrayedDay
+      ? `<div style="margin:8px 18px 4px;padding:6px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;font-size:11px;color:rgba(255,255,255,0.4);font-family:'DM Mono',monospace;">此日搭乘 8/2 船班，尚未抵達綠島</div>`
+      : '';
+    const grayStyle = isGrayedDay ? ' style="opacity:0.3;filter:grayscale(50%);pointer-events:none;"' : '';
+
+    dc.innerHTML = `<div style="font-size:11px;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.45);padding:10px 18px 2px;letter-spacing:0.06em;">${day.date} · ${day.label}</div>${grayBanner}<div class="timeline"${grayStyle}>${itemsHtml}</div>`;
     contentsEl.appendChild(dc);
   });
 
@@ -919,11 +1200,11 @@ function closeSpotPopup(e) {
 
 <script>
 const CHECKLIST = {
-  dive:    ["面鏡","蛙鞋","呼吸管","襪套","浮球","防寒衣","毛巾衣","相機","記憶卡","防水殼"],
+  dive:    ["面鏡","蛙鞋","呼吸管","襪套","浮球","防寒衣","毛巾衣","相機","記憶卡","防水殼","海洋友善防曬","助曬油"],
   med:     ["暈船藥","抗組織胺","止痛藥","止瀉藥"],
   clothes: ["四天三夜衣物","泳裝","海灘褲","涼鞋","防曬外套","太陽眼鏡"],
-  daily:   ["充電線","行動電源","保養品","盥洗用品"],
-  run:     ["跑鞋","運動衣","越野跑背心","補給果膠"],
+  daily:   ["充電線","行動電源","保養品","盥洗用品","身分證","機車駕照"],
+  run:     ["跑鞋","運動衣","越野跑背心","補給果膠","帽子"],
 };
 
 function renderChecklist() {
@@ -935,14 +1216,225 @@ function renderChecklist() {
         <div class="check-box"></div>
         <span>${item}</span>
       </div>`).join('');
+    updateCount(key);
   });
 }
 
 function toggleCheck(el) {
   el.classList.toggle('checked');
+  const items = el.closest('.checklist-items');
+  const key = items.id.replace('cl-', '');
+  updateCount(key);
+  updateTotalProgress();
 }
 
-// renderChecklist 在 renderResult 末尾呼叫
+function updateTotalProgress() {
+  const all = document.querySelectorAll('.check-item');
+  const done = document.querySelectorAll('.check-item.checked');
+  const total = all.length, checked = done.length;
+  const countEl = document.getElementById('totalProgressCount');
+  const barEl = document.getElementById('totalProgressBar');
+  if (countEl) countEl.textContent = `${checked} / ${total}`;
+  if (barEl) barEl.style.width = total > 0 ? `${Math.round(checked/total*100)}%` : '0%';
+}
+
+function toggleCL(title) {
+  title.classList.toggle('open');
+  const items = title.nextElementSibling;
+  items.classList.toggle('open');
+}
+
+function updateCount(key) {
+  const items = document.querySelectorAll(`#cl-${key} .check-item`);
+  const checked = document.querySelectorAll(`#cl-${key} .check-item.checked`);
+  const cnt = document.getElementById(`cnt-${key}`);
+  if (cnt) cnt.textContent = checked.length > 0 ? `${checked.length}/${items.length}` : `${items.length}`;
+}
+
+// renderChecklist 在 renderResult 末尾呼叫，完成後更新總進度
+const _origRenderChecklist = renderChecklist;
+renderChecklist = function() { _origRenderChecklist(); updateTotalProgress(); };
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ── ① 倒數計時器 ──────────────────────────────────────
+(function initCountdown() {
+  const target = new Date('2026-08-01T00:00:00+08:00');
+  const wrap = document.getElementById('countdownWrap');
+  function update() {
+    const diff = target - new Date();
+    if (diff <= 0) {
+      wrap.innerHTML = '<p class="cd-gone-msg">🤿 出發囉！今夏辣一波綠島！</p>';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    wrap.innerHTML = `<div class="countdown-wrap">
+      <div class="cd-unit"><div class="cd-num">${String(d).padStart(2,'0')}</div><div class="cd-label">天</div></div>
+      <div class="cd-unit"><div class="cd-num">${String(h).padStart(2,'0')}</div><div class="cd-label">時</div></div>
+      <div class="cd-unit"><div class="cd-num">${String(m).padStart(2,'0')}</div><div class="cd-label">分</div></div>
+      <div class="cd-unit"><div class="cd-num">${String(s).padStart(2,'0')}</div><div class="cd-label">秒</div></div>
+    </div>`;
+    setTimeout(update, 1000);
+  }
+  update();
+})();
+
+// ── ④ 綠島天氣預報 (Open-Meteo) ──────────────────────
+const WMO_MAP = {
+  0:{i:'☀️',t:'晴'}, 1:{i:'🌤',t:'晴時多雲'}, 2:{i:'⛅',t:'多雲'}, 3:{i:'☁️',t:'陰'},
+  45:{i:'🌫',t:'霧'}, 48:{i:'🌫',t:'霧'},
+  51:{i:'🌦',t:'毛毛雨'}, 53:{i:'🌦',t:'細雨'}, 55:{i:'🌧',t:'小雨'},
+  61:{i:'🌧',t:'小雨'}, 63:{i:'🌧',t:'中雨'}, 65:{i:'🌧',t:'大雨'},
+  71:{i:'❄️',t:'小雪'}, 73:{i:'❄️',t:'中雪'}, 75:{i:'❄️',t:'大雪'},
+  80:{i:'🌧',t:'陣雨'}, 81:{i:'🌧',t:'陣雨'}, 82:{i:'⛈',t:'強陣雨'},
+  95:{i:'⛈',t:'雷雨'}, 96:{i:'⛈',t:'強雷雨'}, 99:{i:'⛈',t:'強雷雨'},
+};
+function wmoInfo(code) {
+  return WMO_MAP[code] || WMO_MAP[Math.floor(code/10)*10] || {i:'🌡',t:'未知'};
+}
+(async function loadWeather() {
+  const cardsEl = document.getElementById('weatherCards');
+  try {
+    const [w, marine] = await Promise.all([
+      fetch('https://api.open-meteo.com/v1/forecast?latitude=22.6617&longitude=121.4931&daily=weathercode,temperature_2m_max,temperature_2m_min,windspeed_10m_max&timezone=Asia%2FTaipei&forecast_days=7').then(r=>r.json()),
+      fetch('https://marine-api.open-meteo.com/v1/marine?latitude=22.6617&longitude=121.4931&daily=wave_height_max&timezone=Asia%2FTaipei&forecast_days=7').then(r=>r.json()).catch(()=>null)
+    ]);
+    const TRIP_START = '2026-08-01', TRIP_END = '2026-08-04';
+    const weekday = ['日','一','二','三','四','五','六'];
+    cardsEl.innerHTML = w.daily.time.map((date, i) => {
+      const isTrip = date >= TRIP_START && date <= TRIP_END;
+      const d = new Date(date + 'T12:00:00+08:00');
+      const label = `${d.getMonth()+1}/${d.getDate()}（${weekday[d.getDay()]}）`;
+      const {i: icon, t: desc} = wmoInfo(w.daily.weathercode[i]);
+      const tMax = Math.round(w.daily.temperature_2m_max[i]);
+      const tMin = Math.round(w.daily.temperature_2m_min[i]);
+      const wind = Math.round(w.daily.windspeed_10m_max[i]);
+      const wave = marine?.daily?.wave_height_max?.[i];
+      return `<div class="weather-card${isTrip?' trip-day':''}">
+        <div class="weather-date">${label}</div>
+        ${isTrip ? '<div class="weather-trip-badge">✦ 行程中 ✦</div>' : ''}
+        <div class="weather-icon">${icon}</div>
+        <div class="weather-desc">${desc}</div>
+        <div class="weather-temp">${tMax}° <span>/ ${tMin}°</span></div>
+        ${wave != null ? `<div class="weather-wave">🌊 ${wave.toFixed(1)}m</div>` : ''}
+        <div class="weather-wind">💨 ${wind} km/h</div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    cardsEl.innerHTML = '<div class="notice-box" style="width:100%;flex-shrink:0;">天氣資料暫時無法載入</div>';
+  }
+})();
+
+// ── ⑥ 全員船班總覽 ────────────────────────────────────
+(function renderFerryOverview() {
+  // 以「去程 + 回程」組合分組
+  const comboMap = {};
+  MEMBERS.forEach(m => {
+    const key = m.ferry_go + '|||' + m.ferry_back;
+    if (!comboMap[key]) comboMap[key] = { ferry_go: m.ferry_go, ferry_back: m.ferry_back, members: [] };
+    comboMap[key].members.push(m.display);
+  });
+
+  // 排序：先顯示有八月的組，其餘依去程時間
+  const groups = Object.values(comboMap).sort((a, b) => {
+    const aA = a.members.includes('八月'), bA = b.members.includes('八月');
+    if (aA && !bA) return -1;
+    if (!aA && bA) return 1;
+    return a.ferry_go.localeCompare(b.ferry_go, 'zh-TW');
+  });
+
+  // 各組指定小領隊 / 副隊長（key = ferry_go|||ferry_back）
+  const ROLE_MAP = {
+    '台東→綠島 09:30（天王星 S0930）|||綠島→台東 14:30（綠星2號 G21430）': { leader:'八月', deputy:'阿緯' },
+    '台東→綠島 09:30（天王星 S0930）|||綠島→台東 10:30（天王星 S1030）':   { leader:'小竣' },
+    '台東→綠島 09:30（天王星 S0930）|||綠島→台東 12:30（綠星2號 G21230）': { leader:'許凱' },
+    '台東→綠島 13:30（綠星2號 G21330）|||綠島→台東 14:30（綠星2號 G21430）': { leader:'阿文' },
+    '8/2 台東→綠島 07:30（天王星 S0730）|||綠島→台東 14:30（綠星2號 G21430）': { leader:'奕方' },
+  };
+
+  const rows = groups.map(g => {
+    const comboKey = g.ferry_go + '|||' + g.ferry_back;
+    const roles = ROLE_MAP[comboKey] || {};
+    const leader = roles.leader || null;
+    const deputy = roles.deputy || null;
+    // 排序：小領隊 → 副隊長 → 其他
+    const sortedMembers = [...g.members].sort((a, b) => {
+      const rankA = a === leader ? 0 : a === deputy ? 1 : 2;
+      const rankB = b === leader ? 0 : b === deputy ? 1 : 2;
+      return rankA - rankB;
+    });
+    const memberTags = sortedMembers.map(n => {
+      if (n === leader) {
+        return `<span class="fo-name-tag fo-leader">${n}</span>`;
+      }
+      if (n === deputy) {
+        return `<span class="fo-name-tag fo-deputy">${n}</span>`;
+      }
+      return `<span class="fo-name-tag">${n}</span>`;
+    }).join('');
+
+    return `
+      <div class="ferry-row-ov ferry-combo-group">
+        <div class="ferry-combo-header">
+          <div>
+            <span class="fo-badge go">去程</span>
+            <span class="fo-ferry-name">${g.ferry_go}</span>
+          </div>
+          <span class="ferry-combo-divider">▸</span>
+          <div>
+            <span class="fo-badge back">回程</span>
+            <span class="fo-ferry-name">${g.ferry_back}</span>
+          </div>
+          <span class="fo-count" style="margin-left:auto;">${g.members.length} 人</span>
+        </div>
+        <div class="fo-names">${memberTags}</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('ferryBody').innerHTML = rows;
+})();
+
+function toggleFerryOverview() {
+  const toggle = document.getElementById('ferryToggle');
+  const body = document.getElementById('ferryBody');
+  toggle.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+// ── ⑦ 潛點全覽地圖 (Leaflet) ─────────────────────────
+(function initDiveMap() {
+  const map = L.map('diveMap', { zoomControl: true, scrollWheelZoom: false })
+    .setView([22.655, 121.490], 13);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd', maxZoom: 19
+  }).addTo(map);
+
+  const spots = [
+    { name:'石朗十字架及郵筒', lat:22.6551853, lng:121.4731669, day:'Day 1（8/1）', color:'#ff8c38' },
+    { name:'柴口浮潛區燕魚郵筒', lat:22.6766438, lng:121.4828764, day:'Day 2 上午（8/2）', color:'#4dd4f0' },
+    { name:'溫泉港', lat:22.6460, lng:121.5005, day:'Day 2 下午（8/2）', color:'#7de8ff' },
+    { name:'大白沙時光隧道', lat:22.63722, lng:121.49385, day:'Day 3 上午（8/3）', color:'#4dd4f0' },
+    { name:'將軍岩', lat:22.6428, lng:121.5035, day:'Day 3 下午（8/3）', color:'#7de8ff' },
+  ];
+  spots.forEach((s, idx) => {
+    const icon = L.divIcon({
+      html: `<div style="
+        background:${s.color};width:14px;height:14px;border-radius:50%;
+        border:2.5px solid #fff;
+        box-shadow:0 0 10px ${s.color},0 0 3px rgba(0,0,0,0.5);
+        display:flex;align-items:center;justify-content:center;
+        font-size:8px;color:#000;font-weight:700;
+      ">${idx+1}</div>`,
+      className: '', iconSize: [14,14], iconAnchor: [7,7], popupAnchor: [0,-10]
+    });
+    L.marker([s.lat, s.lng], { icon }).addTo(map)
+      .bindPopup(`<b style="font-size:13px">${s.name}</b><br><span style="color:#888;font-size:11px">${s.day}</span>`, { maxWidth: 200 });
+  });
+})();
 </script>
 </body>
 </html>

@@ -1112,22 +1112,36 @@ function renderResult(p) {
       ];
     }
 
-    // 08/03 水肺：在 10:00 自潛後插岸潛，14:30 自潛後插船潛
+    // 08/03 水肺詳細行程注入
     if (isScuba && day.day === 'Day 3') {
       const injected = [];
       visibleItems.forEach(item => {
-        injected.push(item);
+        // 07:40 民宿集合、08:00 岸潛 → 插在 10:00 自潛之前
         if (item.time === '10:00') {
           injected.push({
-            time: '上午',
-            text: "水肺岸潛（測潛）<span class='tl-tag scuba'>水肺</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>費用包含：氣瓶、導潛、配重、保險</span>",
+            time: '07:40',
+            text: "民宿集合 <span class='tl-tag scuba'>水肺</span>",
+            special: false, _scuba: true
+          });
+          injected.push({
+            time: '08:00',
+            text: "海角樂園潛店（中寮）集合 <span class='tl-tag scuba'>水肺</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>岸潛（測試潛）· 費用包含：氣瓶、導潛、配重、保險</span>",
             special: false, _scuba: true
           });
         }
-        if (item.time === '14:30') {
+        // 水肺成員跳過自由潛水項目（10:00 / 14:30）
+        if (item.time === '10:00' || item.time === '14:30') return;
+        injected.push(item);
+        // 12:25 集合、12:45 船潛 → 插在午餐之後
+        if (item.time === '中午') {
           injected.push({
-            time: '下午',
-            text: "水肺船潛 × 2 <span class='tl-tag scuba'>水肺</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>地點依當天天氣而定 · 費用包含：氣瓶、導潛、配重、保險</span>",
+            time: '12:25',
+            text: "海角樂園潛店（中寮）集合 <span class='tl-tag scuba'>水肺</span>",
+            special: false, _scuba: true
+          });
+          injected.push({
+            time: '12:45',
+            text: "由潛店帶領上船，船潛 × 2 <span class='tl-tag scuba'>水肺</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>地點依當天天氣而定 · 費用包含：氣瓶、導潛、配重、保險</span>",
             special: false, _scuba: true
           });
         }

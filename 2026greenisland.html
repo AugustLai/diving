@@ -1025,13 +1025,15 @@ const ITINERARY = [
 
 // ── 查詢邏輯 ─────────────────────────────────────────
 function matchScore(m, q) {
+  const ql = q.toLowerCase();
   const fields = m.aliases || [];
   for (const f of fields) {
-    if (f === q) return 100;
-    if (f.includes(q) || q.includes(f)) return 80;
+    const fl = f.toLowerCase();
+    if (fl === ql) return 100;
+    if (fl.includes(ql) || ql.includes(fl)) return 80;
   }
-  const combined = fields.join('');
-  if (q.split('').every(ch => combined.includes(ch))) return 50;
+  const combined = fields.join('').toLowerCase();
+  if (ql.split('').every(ch => combined.includes(ch))) return 50;
   return 0;
 }
 

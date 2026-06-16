@@ -643,6 +643,29 @@
     transition: width 0.3s ease; width: 0%;
   }
 
+  /* ── FEE CARD ── */
+  .fee-card {
+    background: rgba(255,120,30,0.08);
+    border: 1px solid rgba(255,120,30,0.30);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+  }
+  .fee-title {
+    font-size: 10px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em;
+    color: rgba(255,140,60,0.85); margin-bottom: 10px; text-transform: uppercase;
+  }
+  .fee-formula {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+    font-size: 13px; color: rgba(255,255,255,0.85);
+  }
+  .fee-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .fee-item-label { font-size: 9px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.40); }
+  .fee-item-val { font-size: 14px; font-family: 'DM Mono', monospace; font-weight: 600; }
+  .fee-op { color: rgba(255,255,255,0.35); font-size: 16px; padding: 0 2px; align-self: center; }
+  .fee-balance-val { color: #ff7820; font-size: 18px; }
+  .fee-due { font-size: 10px; color: rgba(255,140,60,0.75); margin-top: 8px; font-family: 'DM Mono', monospace; }
+
   /* ── VISIT COUNTER ── */
   .visit-footer {
     display: flex; align-items: center; justify-content: center; gap: 0;
@@ -741,6 +764,9 @@
         <div class="person-meta" id="metaEl"></div>
       </div>
     </div>
+
+    <!-- 費用 -->
+    <div id="feeCard"></div>
 
     <!-- 船班 -->
     <div class="section">
@@ -886,6 +912,58 @@ const MEMBERS = [
 // 08/03 水肺潛水成員（display name）
 const SCUBA_DAY3 = new Set(['Alvin','大興','許凱','聖峰','Box','阿文','軒哥','奕方','Felix','貴智','Jebou','Jerry']);
 
+// 團費資料（訂金、尾款、台東住宿房號）
+const FEE_DATA = {
+  "小竣": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0 },
+  "小古": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0 },
+  "Alex": { deposit: 3500, balance: 3780, taitung_room: "欣京棧3C", taitung_fee: 780 },
+  "Jacky": { deposit: 3000, balance: 4280, taitung_room: "欣京棧3D", taitung_fee: 780 },
+  "瑋瑋": { deposit: 3000, balance: 4280, taitung_room: "欣京棧3D", taitung_fee: 780 },
+  "黑": { deposit: 3000, balance: 4280, taitung_room: "欣京棧FB", taitung_fee: 780 },
+  "煒晴": { deposit: 3000, balance: 4280, taitung_room: "欣京棧FB", taitung_fee: 780 },
+  "奕方": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0 },
+  "Volten": { deposit: 3000, balance: 4280, taitung_room: "欣京棧FB", taitung_fee: 780 },
+  "貴智": { deposit: 3000, balance: 4280, taitung_room: "欣京棧FD", taitung_fee: 780 },
+  "奕翰": { deposit: 3000, balance: 4280, taitung_room: "欣京棧FD", taitung_fee: 780 },
+  "聖峰": { deposit: 3000, balance: 4280, taitung_room: "欣京棧FD", taitung_fee: 780 },
+  "Alvin": { deposit: 3000, balance: 4280, taitung_room: "欣京棧3C", taitung_fee: 780 },
+  "Box": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0 },
+  "石頭": { deposit: 3000, balance: 4280, taitung_room: "欣京棧3A", taitung_fee: 780 },
+  "昂扣": { deposit: 3000, balance: 4280, taitung_room: "欣京棧3A", taitung_fee: 780 },
+  "阿文": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0 },
+  "大大": { deposit: 3000, balance: 4280, taitung_room: "欣京棧3B", taitung_fee: 780 },
+  "軒哥": { deposit: 3000, balance: 4280, taitung_room: "欣京棧3D", taitung_fee: 780 },
+  "科諺": { deposit: 3000, balance: 4280, taitung_room: "欣京棧FC", taitung_fee: 780 },
+  "Jerry": { deposit: 6500, balance: 780, taitung_room: "欣京棧FC", taitung_fee: 780 },
+  "CJ": { deposit: 6500, balance: 780, taitung_room: "欣京棧FC", taitung_fee: 780 },
+  "Jebou": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0 },
+  "和億": { deposit: 6500, balance: 780, taitung_room: "欣京棧3B", taitung_fee: 780 },
+  "小任": { deposit: 3000, balance: 4280, taitung_room: "欣京棧FA", taitung_fee: 780 },
+  "Allen": { deposit: 3000, balance: 4280, taitung_room: "欣京棧FA", taitung_fee: 780 },
+  "Felix": { deposit: 6500, balance: 780, taitung_room: "欣京棧3A", taitung_fee: 780 },
+  "Pio": { deposit: 6500, balance: 780, taitung_room: "欣京棧3A", taitung_fee: 780 },
+  "泉": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0 },
+  "阿彰": { deposit: 3000, balance: 4280, taitung_room: "欣京棧3C", taitung_fee: 780 },
+  "阿廷": { deposit: 3000, balance: 4280, taitung_room: "欣京棧FC", taitung_fee: 780 },
+  "珈佑": { deposit: 3000, balance: 4280, taitung_room: "欣京棧3B", taitung_fee: 780 },
+  "阿緯": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2C", taitung_fee: 780 },
+  "八月": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2B", taitung_fee: 780 },
+  "詩豪": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2B", taitung_fee: 780 },
+  "雞腿": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0 },
+  "可樂": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0 },
+  "小丞": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0 },
+  "小晏": { deposit: 6500, balance: 780, taitung_room: "欣京棧2B", taitung_fee: 780 },
+  "阿哲": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2C", taitung_fee: 780 },
+  "阿亮": { deposit: 3000, balance: 4280, taitung_room: "欣京棧FB", taitung_fee: 780 },
+  "振瑋": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0 },
+  "大興": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2D", taitung_fee: 780 },
+  "許凱": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2D", taitung_fee: 780 },
+  "鐘元志": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2C", taitung_fee: 780 },
+  "阿金": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2B", taitung_fee: 780 },
+  "娜娜": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2A", taitung_fee: 780 },
+  "小白": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2A", taitung_fee: 780 },
+};
+
 // ── 共用行程 ────────────────────────────────────────
 const ITINERARY = [
   {
@@ -1010,6 +1088,44 @@ function renderResult(p) {
   metaParts.push(p.green_hotel);
   document.getElementById('metaEl').textContent = metaParts.join(' · ');
 
+  // fee
+  const fee = FEE_DATA[p.display] || {};
+  const feeEl = document.getElementById('feeCard');
+  if (fee.balance !== undefined) {
+    const taitungLabel = fee.taitung_fee > 0
+      ? `台東住宿（${fee.taitung_room}）`
+      : '台東住宿';
+    const taitungVal = fee.taitung_fee > 0 ? `+$${fee.taitung_fee.toLocaleString()}` : '不需要';
+    const taitungColor = fee.taitung_fee > 0 ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.3)';
+    feeEl.innerHTML = `<div class="fee-card">
+      <div class="fee-title">團費明細</div>
+      <div class="fee-formula">
+        <div class="fee-item">
+          <div class="fee-item-label">綠島團費（固定）</div>
+          <div class="fee-item-val">$6,500</div>
+        </div>
+        <div class="fee-op">−</div>
+        <div class="fee-item">
+          <div class="fee-item-label">已付訂金</div>
+          <div class="fee-item-val">$${fee.deposit.toLocaleString()}</div>
+        </div>
+        <div class="fee-op" style="color:${taitungColor};">+</div>
+        <div class="fee-item" style="color:${taitungColor};">
+          <div class="fee-item-label">${taitungLabel}</div>
+          <div class="fee-item-val">${taitungVal}</div>
+        </div>
+        <div class="fee-op">=</div>
+        <div class="fee-item">
+          <div class="fee-item-label">待繳尾款</div>
+          <div class="fee-item-val fee-balance-val">$${fee.balance.toLocaleString()}</div>
+        </div>
+      </div>
+      <div class="fee-due">繳費期限：2025/07/01</div>
+    </div>`;
+  } else {
+    feeEl.innerHTML = '';
+  }
+
   // ferry
   const fc = document.getElementById('ferryCard');
   fc.innerHTML = `
@@ -1044,8 +1160,11 @@ function renderResult(p) {
 
   // rooms
   const rg = document.getElementById('roomsGrid');
+  const taitungRoom = (fee && fee.taitung_room) ? fee.taitung_room : '';
   const taitungHtml = p.taitung_need
-    ? `<div class="room-name" style="color:rgba(255,255,255,0.3);font-style:italic;">配房待補</div><div class="room-type">7/31（五）晚 · 已登記需要</div>`
+    ? (taitungRoom
+        ? `<div class="room-name"><a href="https://maps.app.goo.gl/YkWe2qXgJZJ8aFMX9" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);">欣京棧旅店</a></div><div class="room-type">7/31（五）晚 · ${taitungRoom}</div>`
+        : `<div class="room-name" style="color:rgba(255,255,255,0.3);font-style:italic;">配房待補</div><div class="room-type">7/31（五）晚 · 已登記需要</div>`)
     : `<div class="room-tbd">不需台東住宿</div>`;
     const greenMatesHtml = p.green_mates && p.green_mates.length > 0
     ? `<div class="room-mates">同房：${p.green_mates.join('、')}</div>`

@@ -713,6 +713,24 @@
     <p class="hero-sub">2026.08.01 — 08.04 · GREEN ISLAND</p>
     <div id="countdownWrap"></div>
 
+    <div style="margin: 18px 0 14px; padding: 14px 18px; background: rgba(255,110,20,0.10); border: 1px solid rgba(255,110,20,0.40); border-radius: 14px; text-align: center;">
+      <div style="font-size: 10px; font-family: 'DM Mono', monospace; letter-spacing: 0.12em; color: rgba(255,140,60,0.85); margin-bottom: 10px; text-transform: uppercase;">台鐵搶票時間</div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13px;">
+          <span style="color: rgba(255,255,255,0.65);">7/31 車票</span>
+          <span style="color: rgba(255,120,30,0.4);">·</span>
+          <span style="color: #ff7820; font-family: 'DM Mono', monospace; font-weight: 600;">7/3（五）凌晨 00:00</span>
+          <span style="color: rgba(255,140,60,0.6); font-size: 11px;">開搶</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13px;">
+          <span style="color: rgba(255,255,255,0.65);">8/4 車票</span>
+          <span style="color: rgba(255,120,30,0.4);">·</span>
+          <span style="color: #ff7820; font-family: 'DM Mono', monospace; font-weight: 600;">7/7（二）凌晨 00:00</span>
+          <span style="color: rgba(255,140,60,0.6); font-size: 11px;">開搶</span>
+        </div>
+      </div>
+    </div>
+
     <div class="search-card">
       <span class="search-label">輸入綽號，查看你的行程與船班</span>
       <div class="search-row">
@@ -1015,7 +1033,7 @@ const ITINERARY = [
     day: "Day 2", date: "8/2（日）", label: "潛水 + 晚會",
     taitung_only: false,
     items: [
-      { time: "早晨", text: "看日出 · <a href='https://www.google.com.tw/maps/place/%E6%9C%9D%E6%97%A5%E6%BA%AB%E6%B3%89/@22.6366667,121.5052778,15z' target='_blank' style='color:#7de8ff;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'>綠島朝日溫泉</a> <span class='tl-tag'>自行組隊</span>", special: false },
+      { time: "早晨", text: "看日出 · <a href='https://www.google.com/maps/place/%E7%B6%A0%E5%B3%B6%E6%9C%9D%E6%97%A5%E6%BA%AB%E6%B3%89/data=!4m2!3m1!1s0x346f8cfe334241e1:0x23a9f6b34bd0e12e?sa=X&ved=1t:155783&ictx=111' target='_blank' style='color:#7de8ff;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'>綠島朝日溫泉</a> <span class='tl-tag'>自行組隊</span>", special: false },
       { time: "10:00", text: "上午潛水 <span class='tl-tag'>自由潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：{{SPOT:柴口浮潛區燕魚郵筒}}<span style='font-size:12px;color:rgba(255,255,255,0.35);'>（依當天浪況調整）</span></span>", special: false },
       { time: "中午", text: "午餐自理", special: false },
       { time: "14:30", text: "下午潛水 <span class='tl-tag'>自由潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：{{SPOT:溫泉港}}<span style='font-size:12px;color:rgba(255,255,255,0.35);'>（依當天浪況調整）</span></span>", special: false },
@@ -1028,7 +1046,7 @@ const ITINERARY = [
     day: "Day 3", date: "8/3（一）", label: "環島路跑接力",
     taitung_only: false,
     items: [
-      { time: "早晨", text: "看日出 · <a href='https://www.google.com.tw/maps/place/%E6%9C%9D%E6%97%A5%E6%BA%AB%E6%B3%89/@22.6366667,121.5052778,15z' target='_blank' style='color:#7de8ff;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'>綠島朝日溫泉</a> <span class='tl-tag'>自行組隊</span>", special: false },
+      { time: "早晨", text: "看日出 · <a href='https://www.google.com/maps/place/%E7%B6%A0%E5%B3%B6%E6%9C%9D%E6%97%A5%E6%BA%AB%E6%B3%89/data=!4m2!3m1!1s0x346f8cfe334241e1:0x23a9f6b34bd0e12e?sa=X&ved=1t:155783&ictx=111' target='_blank' style='color:#7de8ff;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'>綠島朝日溫泉</a> <span class='tl-tag'>自行組隊</span>", special: false },
       { time: "10:00", text: "上午潛水 <span class='tl-tag'>自由潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：{{SPOT:大白沙時光隧道}}<span style='font-size:12px;color:rgba(255,255,255,0.35);'>（依當天浪況調整）</span></span>", special: false },
       { time: "中午", text: "午餐自理", special: false },
       { time: "14:30", text: "下午潛水 <span class='tl-tag'>自由潛水</span><br><span style='font-size:12px;color:rgba(255,255,255,0.35);'>潛點：{{SPOT:將軍岩}}<span style='font-size:12px;color:rgba(255,255,255,0.35);'>（依當天浪況調整）</span></span>", special: false },
@@ -1040,7 +1058,7 @@ const ITINERARY = [
     day: "Day 4", date: "8/4（二）", label: "返程",
     taitung_only: false,
     items: [
-      { time: "早晨", text: "看日出 · <a href='https://www.google.com.tw/maps/place/%E6%9C%9D%E6%97%A5%E6%BA%AB%E6%B3%89/@22.6366667,121.5052778,15z' target='_blank' style='color:#7de8ff;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'>綠島朝日溫泉</a> <span class='tl-tag'>自行組隊</span>", special: false },
+      { time: "早晨", text: "看日出 · <a href='https://www.google.com/maps/place/%E7%B6%A0%E5%B3%B6%E6%9C%9D%E6%97%A5%E6%BA%AB%E6%B3%89/data=!4m2!3m1!1s0x346f8cfe334241e1:0x23a9f6b34bd0e12e?sa=X&ved=1t:155783&ictx=111' target='_blank' style='color:#7de8ff;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);'>綠島朝日溫泉</a> <span class='tl-tag'>自行組隊</span>", special: false },
       { time: "上午", text: "退房整理行李", special: false },
       { time: "各異", text: "依個人船班搭船返回台東富岡漁港", special: false, is_ferry_back_item: true },
     ]
@@ -1193,7 +1211,7 @@ function renderResult(p) {
     : '';
   const taitungHtml = p.taitung_need
     ? (taitungRoom
-        ? `<div class="room-name"><a href="https://maps.app.goo.gl/YkWe2qXgJZJ8aFMX9" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);">欣京棧旅店</a></div><div class="room-type">7/31（五）晚 · ${taitungRoom}</div>${taitungMatesHtml}`
+        ? `<div class="room-name"><a href="https://www.google.com/maps/place/%E4%BA%AC%E6%A3%A7%E8%88%88%E7%9B%9B%E6%B0%91%E5%AE%BF/@22.7886137,121.126531,16z/data=!4m11!3m10!1s0x346fbbd495a9b4f5:0xe31e93e118da1f1c!5m4!1s2026-06-20!2i2!4m1!1i2!8m2!3d22.7886137!4d121.126531!16s%2Fg%2F11clw7lvfc?entry=ttu&g_ep=EgoyMDI2MDYxMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);">欣京棧旅店</a></div><div class="room-type">7/31（五）晚 · ${taitungRoom}</div>${taitungMatesHtml}`
         : `<div class="room-name" style="color:rgba(255,255,255,0.3);font-style:italic;">配房待補</div><div class="room-type">7/31（五）晚 · 已登記需要</div>`)
     : `<div class="room-tbd">不需台東住宿</div>`;
     const greenMatesHtml = p.green_mates && p.green_mates.length > 0
@@ -1315,7 +1333,7 @@ function renderResult(p) {
         const tMates = TAITUNG_MATES[p.display] || [];
         const tMatesStr = tMates.length > 0 ? `<br><span style="font-size:12px;color:rgba(255,255,255,0.45);">同房：${tMates.join('、')}</span>` : '';
         rawText = tRoom
-          ? `<a href="https://maps.app.goo.gl/YkWe2qXgJZJ8aFMX9" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);">欣京棧旅店</a> · <span style="color:#4dd4f0;font-weight:600;">${tRoom}</span>${tMatesStr}`
+          ? `<a href="https://www.google.com/maps/place/%E4%BA%AC%E6%A3%A7%E8%88%88%E7%9B%9B%E6%B0%91%E5%AE%BF/@22.7886137,121.126531,16z/data=!4m11!3m10!1s0x346fbbd495a9b4f5:0xe31e93e118da1f1c!5m4!1s2026-06-20!2i2!4m1!1i2!8m2!3d22.7886137!4d121.126531!16s%2Fg%2F11clw7lvfc?entry=ttu&g_ep=EgoyMDI2MDYxMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(77,212,240,0.4);">欣京棧旅店</a> · <span style="color:#4dd4f0;font-weight:600;">${tRoom}</span>${tMatesStr}`
           : `台東住宿 <span class='tl-tag'>待補</span>`;
       }
       if (item.is_ferry_back_item) {

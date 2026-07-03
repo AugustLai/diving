@@ -670,6 +670,104 @@
   .fee-balance-val { color: #ff7820; font-size: 18px; }
   .fee-due { font-size: 10px; color: rgba(255,140,60,0.75); margin-top: 8px; font-family: 'DM Mono', monospace; }
 
+  /* ── VVVIP 詩豪 全頁黑金主題 ── */
+  @keyframes vipBgIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes vipToastIn {
+    0%   { opacity:0; transform:translateX(-50%) translateY(-16px) scale(0.92); }
+    60%  { opacity:1; transform:translateX(-50%) translateY(4px)   scale(1.02); }
+    100% { opacity:1; transform:translateX(-50%) translateY(0px)   scale(1); }
+  }
+  body.vip-mode { background: #080600; }
+  body.vip-mode .bg-wrap {
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(180,140,20,0.18) 0%, transparent 60%),
+                linear-gradient(180deg, #050400 0%, #0f0b00 40%, #080600 100%) !important;
+    animation: vipBgIn 0.8s ease;
+  }
+  body.vip-mode .bg-wrap::before {
+    background: radial-gradient(circle, #fffbe0 15%, #D4AF37 45%, rgba(180,140,0,0) 100%) !important;
+    box-shadow: 0 0 80px 40px rgba(212,175,55,0.45), 0 0 160px 90px rgba(212,175,55,0.18) !important;
+  }
+  #vip-particles { position:fixed; inset:0; z-index:1; pointer-events:none; }
+  #vip-toast {
+    position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(0);
+    z-index: 9999;
+    background: linear-gradient(135deg, #2a1e00, #5c3f00, #2a1e00);
+    border: 1px solid rgba(212,175,55,0.75);
+    color: #D4AF37;
+    font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.2em;
+    padding: 13px 36px; border-radius: 40px;
+    box-shadow: 0 0 40px rgba(212,175,55,0.4), inset 0 0 20px rgba(212,175,55,0.06);
+    animation: vipToastIn 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    white-space: nowrap;
+  }
+
+  /* ── VVVIP 詩豪 黑金主題 ── */
+  @keyframes goldPulse {
+    0%, 100% { box-shadow: 0 0 18px rgba(212,175,55,0.25), 0 0 40px rgba(212,175,55,0.08); }
+    50%       { box-shadow: 0 0 32px rgba(212,175,55,0.5),  0 0 70px rgba(212,175,55,0.18); }
+  }
+  @keyframes goldShimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+  }
+  #result.vip .person-header {
+    background: linear-gradient(135deg, rgba(18,13,3,0.97), rgba(38,28,8,0.95));
+    border: 1px solid rgba(212,175,55,0.55);
+    animation: goldPulse 3s ease-in-out infinite;
+    position: relative; overflow: hidden;
+  }
+  #result.vip .person-header::before {
+    content: '';
+    position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212,175,55,0.08), transparent);
+    animation: goldShimmer 4s linear infinite;
+    pointer-events: none;
+  }
+  #result.vip .avatar {
+    background: linear-gradient(135deg, #7a5c10, #D4AF37, #ffe066, #D4AF37, #7a5c10);
+    background-size: 200% 200%;
+    animation: goldShimmer 3s linear infinite;
+    box-shadow: 0 0 18px rgba(212,175,55,0.6);
+    color: #1a1000; font-weight: 800;
+  }
+  #result.vip .person-name {
+    color: #D4AF37;
+    text-shadow: 0 0 18px rgba(212,175,55,0.7), 0 0 40px rgba(212,175,55,0.3);
+    font-weight: 700;
+  }
+  #result.vip .person-meta { color: rgba(212,175,55,0.65); }
+  .vip-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: linear-gradient(135deg, #3a2a00, #6b4e00);
+    border: 1px solid rgba(212,175,55,0.7);
+    color: #D4AF37; font-size: 10px;
+    font-family: 'DM Mono', monospace; letter-spacing: 0.15em;
+    padding: 2px 10px; border-radius: 20px; margin-left: 8px;
+    vertical-align: middle;
+  }
+  #result.vip .section-title { color: rgba(212,175,55,0.85); }
+  #result.vip .card {
+    background: rgba(18,13,3,0.75);
+    border-color: rgba(212,175,55,0.28);
+  }
+  #result.vip .badge-go   { background: #6b4e00; color: #ffe47a; }
+  #result.vip .badge-back { background: #3a2a00; color: #D4AF37; }
+  #result.vip .badge-tbd  { background: rgba(212,175,55,0.1); color: rgba(212,175,55,0.5); }
+  #result.vip .fee-card {
+    background: rgba(212,175,55,0.07);
+    border-color: rgba(212,175,55,0.38);
+  }
+  #result.vip .fee-title, #result.vip .fee-due { color: rgba(212,175,55,0.8); }
+  #result.vip .fee-balance-val { color: #D4AF37; }
+  #result.vip .room-cell { border-color: rgba(212,175,55,0.2); }
+  #result.vip .day-tab.active {
+    background: rgba(212,175,55,0.15);
+    border-color: rgba(212,175,55,0.5);
+    color: #D4AF37;
+  }
+  #result.vip .tl-dot { background: #D4AF37; }
+  #result.vip .tl-dot.special { background: #ffe47a; box-shadow: 0 0 8px rgba(212,175,55,0.8); }
+
   /* ── VISIT COUNTER ── */
   .visit-footer {
     display: flex; align-items: center; justify-content: center; gap: 0;
@@ -969,7 +1067,7 @@ const FEE_DATA = {
   "阿廷": { deposit: 3000, balance: 4280, taitung_room: "欣京棧FC", taitung_fee: 780, uranus_total: 100, uranus_paid: 0, balance_paid: "06/16" },
   "珈佑": { deposit: 3000, balance: 4280, taitung_room: "欣京棧3B", taitung_fee: 780, uranus_total: 100, uranus_paid: 100, balance_paid: "06/24" },
   "阿緯": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2C", taitung_fee: 780, uranus_total: 100, uranus_paid: 100, balance_paid: "06/20" },
-  "八月": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2B", taitung_fee: 780, uranus_total: 100, uranus_paid: 0, balance_paid: "06/16" },
+  "八月": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2B", taitung_fee: 780, uranus_total: 100, uranus_paid: 100, balance_paid: "06/16" },
   "詩豪": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2B", taitung_fee: 780, uranus_total: 100, uranus_paid: 100, balance_paid: "06/21" },
   "雞腿": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0, uranus_total: 100, uranus_paid: 100, balance_paid: "06/16" },
   "可樂": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0, uranus_total: 100, uranus_paid: 0, balance_paid: "06/30" },
@@ -1123,9 +1221,24 @@ function pickPerson(name) {
 }
 
 function renderResult(p) {
+  // VIP 模式
+  const isVIP = p.display === '詩豪';
+  const resultEl = document.getElementById('result');
+  if (isVIP) {
+    resultEl.classList.add('vip');
+    document.body.classList.add('vip-mode');
+    startGoldParticles();
+    showVIPToast();
+  } else {
+    resultEl.classList.remove('vip');
+    document.body.classList.remove('vip-mode');
+    stopGoldParticles();
+  }
+
   // avatar
   document.getElementById('avatarEl').textContent = p.display ? p.display[0] : p.name[0];
-  document.getElementById('nameEl').textContent = p.display;
+  const nameEl = document.getElementById('nameEl');
+  nameEl.innerHTML = p.display + (isVIP ? ' <span class="vip-badge">VVVIP</span>' : '');
   const extraAliases = p.aliases.slice(1);
   const metaParts = [];
   if (extraAliases.length > 0) metaParts.push(extraAliases.join(' / '));
@@ -1135,7 +1248,11 @@ function renderResult(p) {
   // fee
   const fee = FEE_DATA[p.display] || {};
   const feeEl = document.getElementById('feeCard');
-  if (fee.balance !== undefined) {
+  const hasOutstanding = fee.balance !== undefined && (
+    !fee.balance_paid ||
+    (fee.uranus_total > 0 && fee.uranus_paid < fee.uranus_total)
+  );
+  if (hasOutstanding) {
     const taitungLabel = fee.taitung_fee > 0 ? `台東住宿（${fee.taitung_room}）` : '台東住宿';
     const taitungVal = fee.taitung_fee > 0 ? `+$${fee.taitung_fee.toLocaleString()}` : '不需要';
     const taitungColor = fee.taitung_fee > 0 ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.3)';
@@ -1413,7 +1530,7 @@ function renderResult(p) {
 
   document.getElementById('result').style.display = 'block';
   document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  if (typeof renderChecklist === 'function') renderChecklist();
+  if (typeof renderChecklist === 'function') renderChecklist(p.display);
 }
 
 function switchDay(idx) {
@@ -1423,6 +1540,9 @@ function switchDay(idx) {
 
 function resetView() {
   document.getElementById('result').style.display = 'none';
+  document.getElementById('result').classList.remove('vip');
+  document.body.classList.remove('vip-mode');
+  stopGoldParticles();
   document.getElementById('nameInput').value = '';
   document.getElementById('errMsg').style.display = 'none';
   document.getElementById('suggestList').style.display = 'none';
@@ -1504,15 +1624,31 @@ const CHECKLIST = {
   run:     ["跑鞋","運動衣","越野跑背心","補給果膠","帽子"],
 };
 
-function renderChecklist() {
+// 個人專屬額外清單（key = display 名稱）
+const CHECKLIST_PERSONAL = {
+  "詩豪": {
+    dive:  ["潛水帽"],
+    daily: ["HDMI線","Type C 轉接頭"],
+  },
+};
+
+function renderChecklist(displayName) {
+  const personal = (displayName && CHECKLIST_PERSONAL[displayName]) || {};
   Object.entries(CHECKLIST).forEach(([key, items]) => {
     const el = document.getElementById('cl-' + key);
     if (!el) return;
-    el.innerHTML = items.map(item => `
+    const extraItems = personal[key] || [];
+    const baseHtml = items.map(item => `
       <div class="check-item" onclick="toggleCheck(this)">
         <div class="check-box"></div>
         <span>${item}</span>
       </div>`).join('');
+    const extraHtml = extraItems.map(item => `
+      <div class="check-item" onclick="toggleCheck(this)" style="border-left:2px solid rgba(212,175,55,0.5);padding-left:6px;">
+        <div class="check-box"></div>
+        <span>${item} <span style="font-size:9px;font-family:'DM Mono',monospace;color:rgba(212,175,55,0.7);margin-left:4px;">必帶</span></span>
+      </div>`).join('');
+    el.innerHTML = baseHtml + extraHtml;
     updateCount(key);
   });
 }
@@ -1753,6 +1889,85 @@ function toggleFerryOverview() {
       .bindPopup(`<b style="font-size:13px">${s.name}</b><br><span style="color:#888;font-size:11px">${s.day}</span>`, { maxWidth: 200 });
   });
 })();
+</script>
+
+<script>
+// ── VVVIP 金色粒子 ────────────────────────────────────
+let _vipParticleRAF = null;
+
+function startGoldParticles() {
+  stopGoldParticles();
+  const canvas = document.createElement('canvas');
+  canvas.id = 'vip-particles';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const COLORS = ['#D4AF37','#ffe066','#c9a227','#fff0a0','#f0d060'];
+  const particles = Array.from({ length: 72 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight + window.innerHeight,
+    r: Math.random() * 2.5 + 0.8,
+    speed: Math.random() * 0.6 + 0.3,
+    drift: (Math.random() - 0.5) * 0.4,
+    alpha: Math.random() * 0.6 + 0.3,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    twinkle: Math.random() * Math.PI * 2,
+    twinkleSpeed: Math.random() * 0.03 + 0.01,
+  }));
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.y -= p.speed;
+      p.x += p.drift;
+      p.twinkle += p.twinkleSpeed;
+      const a = p.alpha * (0.6 + 0.4 * Math.sin(p.twinkle));
+      ctx.save();
+      ctx.globalAlpha = a;
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 6;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      if (p.y < -10) {
+        p.y = canvas.height + 10;
+        p.x = Math.random() * canvas.width;
+      }
+    });
+    _vipParticleRAF = requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+function stopGoldParticles() {
+  if (_vipParticleRAF) { cancelAnimationFrame(_vipParticleRAF); _vipParticleRAF = null; }
+  const c = document.getElementById('vip-particles');
+  if (c) c.remove();
+}
+
+function showVIPToast() {
+  const old = document.getElementById('vip-toast');
+  if (old) old.remove();
+  const toast = document.createElement('div');
+  toast.id = 'vip-toast';
+  toast.textContent = '✦   尊榮  VVVIP  詩豪  ✦';
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.style.transition = 'opacity 0.8s, transform 0.8s';
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(-50%) translateY(-12px)';
+    setTimeout(() => toast.remove(), 800);
+  }, 3200);
+}
 </script>
 
 </body>

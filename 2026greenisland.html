@@ -981,8 +981,8 @@
 const MEMBERS = [
   { name:"八月", display:"八月", aliases:["八月","August"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["詩豪","雞腿","可樂","小晏","阿金"], taitung_need:true },
   { name:"詩豪", display:"詩豪", aliases:["詩豪"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","雞腿","可樂","小晏","阿金"], taitung_need:true },
-  { name:"雞腿", display:"雞腿", aliases:["雞腿"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","可樂","小晏","阿金"], taitung_need:false },
-  { name:"可樂", display:"可樂", aliases:["可樂"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","雞腿","小晏","阿金"], taitung_need:false },
+  { name:"雞腿", display:"雞腿", aliases:["雞腿"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","可樂","小晏","阿金"], taitung_need:true },
+  { name:"可樂", display:"可樂", aliases:["可樂"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","雞腿","小晏","阿金"], taitung_need:true },
   { name:"小晏", display:"小晏", aliases:["小晏"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","雞腿","可樂","阿金"], taitung_need:true },
   { name:"阿金", display:"阿金", aliases:["阿金"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"六人房", green_mates:["八月","詩豪","雞腿","可樂","小晏"], taitung_need:true },
   { name:"阿緯", display:"阿緯", aliases:["阿緯"], ferry_go:"台東→綠島 09:30（天王星 S0930）", ferry_back:"綠島→台東 14:30（綠星2號 G21430）", green_hotel:"綠邑旅宿", green_room:"四人房A", green_mates:["小丞","阿哲","鐘元志"], taitung_need:true },
@@ -1069,8 +1069,8 @@ const FEE_DATA = {
   "阿緯": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2C", taitung_fee: 780, uranus_total: 100, uranus_paid: 100, balance_paid: "06/20" },
   "八月": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2B", taitung_fee: 780, uranus_total: 100, uranus_paid: 100, balance_paid: "06/16" },
   "詩豪": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2B", taitung_fee: 780, uranus_total: 100, uranus_paid: 100, balance_paid: "06/21" },
-  "雞腿": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0, uranus_total: 100, uranus_paid: 100, balance_paid: "06/16" },
-  "可樂": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0, uranus_total: 100, uranus_paid: 0, balance_paid: "06/30" },
+  "雞腿": { deposit: 3000, balance: 3500, taitung_room: "欣京棧1D", taitung_fee: 750, taitung_paid: false, uranus_total: 100, uranus_paid: 100, balance_paid: "06/16" },
+  "可樂": { deposit: 3000, balance: 3500, taitung_room: "欣京棧1D", taitung_fee: 750, taitung_paid: false, uranus_total: 100, uranus_paid: 100, balance_paid: "06/30" },
   "小丞": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0, uranus_total: 100, uranus_paid: 0, balance_paid: "" },
   "小晏": { deposit: 6500, balance: 780, taitung_room: "欣京棧2B", taitung_fee: 780, uranus_total: 100, uranus_paid: 0, balance_paid: "06/18" },
   "阿哲": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2C", taitung_fee: 780, uranus_total: 100, uranus_paid: 0, balance_paid: "06/16" },
@@ -1250,80 +1250,68 @@ function renderResult(p) {
   const feeEl = document.getElementById('feeCard');
   const hasOutstanding = fee.balance !== undefined && (
     !fee.balance_paid ||
+    (fee.taitung_fee > 0 && fee.taitung_paid === false) ||
     (fee.uranus_total > 0 && fee.uranus_paid < fee.uranus_total)
   );
   if (hasOutstanding) {
-    const taitungLabel = fee.taitung_fee > 0 ? `台東住宿（${fee.taitung_room}）` : '台東住宿';
-    const taitungVal = fee.taitung_fee > 0 ? `+$${fee.taitung_fee.toLocaleString()}` : '不需要';
-    const taitungColor = fee.taitung_fee > 0 ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.3)';
-
-    // 尾款狀態
-    const balPaidStr = fee.balance_paid || '';
-    const balDueHtml = balPaidStr
-      ? `<div class="fee-due" style="color:rgba(100,220,130,0.85);">尾款已於 ${balPaidStr} 確認收款</div>`
-      : `<div class="fee-due">尾款繳費期限：2026/07/01</div>`;
-
     // 天王星漲價費區塊
-    let uranusHtml = '';
-    if (fee.uranus_total > 0) {
+    const buildUranusHtml = () => {
+      if (!fee.uranus_total) return '';
       const uRemain = fee.uranus_total - fee.uranus_paid;
       const uPaidHtml = fee.uranus_paid > 0
         ? `<div class="fee-op" style="color:rgba(255,255,255,0.3);">−</div>
-           <div class="fee-item">
-             <div class="fee-item-label">已繳</div>
-             <div class="fee-item-val">$${fee.uranus_paid.toLocaleString()}</div>
-           </div>
+           <div class="fee-item"><div class="fee-item-label">已繳</div><div class="fee-item-val">$${fee.uranus_paid.toLocaleString()}</div></div>
            <div class="fee-op">=</div>
-           <div class="fee-item">
-             <div class="fee-item-label">待繳天王星費</div>
-             <div class="fee-item-val fee-balance-val" style="font-size:15px;">$${uRemain.toLocaleString()}</div>
-           </div>`
-        : `<div class="fee-item" style="margin-left:8px;">
-             <div class="fee-item-label">待繳天王星費</div>
-             <div class="fee-item-val fee-balance-val" style="font-size:15px;">$${uRemain.toLocaleString()}</div>
-           </div>`;
+           <div class="fee-item"><div class="fee-item-label">待繳天王星費</div><div class="fee-item-val fee-balance-val" style="font-size:15px;">$${uRemain.toLocaleString()}</div></div>`
+        : `<div class="fee-item" style="margin-left:8px;"><div class="fee-item-label">待繳天王星費</div><div class="fee-item-val fee-balance-val" style="font-size:15px;">$${uRemain.toLocaleString()}</div></div>`;
       const uStatusHtml = uRemain === 0
         ? `<div class="fee-due" style="color:rgba(100,220,130,0.85);">天王星費已繳清</div>`
         : `<div class="fee-due">天王星費繳費期限：2026/07/01</div>`;
-      uranusHtml = `
-      <div style="border-top:1px solid rgba(255,110,20,0.2);margin-top:10px;padding-top:10px;">
+      return `<div style="border-top:1px solid rgba(255,110,20,0.2);margin-top:10px;padding-top:10px;">
         <div class="fee-title" style="margin-bottom:8px;">天王星船票漲價費</div>
         <div class="fee-formula">
-          <div class="fee-item">
-            <div class="fee-item-label">天王星搭乘（${fee.uranus_total/100}趟 × $100）</div>
-            <div class="fee-item-val">$${fee.uranus_total.toLocaleString()}</div>
-          </div>
+          <div class="fee-item"><div class="fee-item-label">天王星搭乘（${fee.uranus_total/100}趟 × $100）</div><div class="fee-item-val">$${fee.uranus_total.toLocaleString()}</div></div>
           ${uPaidHtml}
+        </div>${uStatusHtml}</div>`;
+    };
+
+    // 尾款已付清、但台東追加未繳 → 只顯示追加費用
+    if (fee.balance_paid && fee.taitung_fee > 0 && fee.taitung_paid === false) {
+      feeEl.innerHTML = `<div class="fee-card">
+        <div class="fee-title">團費明細</div>
+        <div class="fee-due" style="color:rgba(100,220,130,0.85);margin-bottom:10px;">尾款已於 ${fee.balance_paid} 確認收款</div>
+        <div style="border-top:1px solid rgba(255,110,20,0.2);padding-top:10px;">
+          <div class="fee-title" style="margin-bottom:8px;">追加 · 台東住宿費</div>
+          <div class="fee-formula">
+            <div class="fee-item"><div class="fee-item-label">台東住宿（${fee.taitung_room}）</div><div class="fee-item-val fee-balance-val">$${fee.taitung_fee.toLocaleString()}</div></div>
+          </div>
+          <div class="fee-due">台東住宿費繳費期限：2026/07/01</div>
         </div>
-        ${uStatusHtml}
+        ${buildUranusHtml()}
+      </div>`;
+    } else {
+      // 一般顯示：完整公式
+      const taitungLabel = fee.taitung_fee > 0 ? `台東住宿（${fee.taitung_room}）` : '台東住宿';
+      const taitungVal   = fee.taitung_fee > 0 ? `+$${fee.taitung_fee.toLocaleString()}` : '不需要';
+      const taitungColor = fee.taitung_fee > 0 ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.3)';
+      const balPaidStr   = fee.balance_paid || '';
+      const balDueHtml   = balPaidStr
+        ? `<div class="fee-due" style="color:rgba(100,220,130,0.85);">尾款已於 ${balPaidStr} 確認收款</div>`
+        : `<div class="fee-due">尾款繳費期限：2026/07/01</div>`;
+      feeEl.innerHTML = `<div class="fee-card">
+        <div class="fee-title">團費明細</div>
+        <div class="fee-formula">
+          <div class="fee-item"><div class="fee-item-label">綠島團費（固定）</div><div class="fee-item-val">$6,500</div></div>
+          <div class="fee-op">−</div>
+          <div class="fee-item"><div class="fee-item-label">已付訂金</div><div class="fee-item-val">$${fee.deposit.toLocaleString()}</div></div>
+          <div class="fee-op" style="color:${taitungColor};">+</div>
+          <div class="fee-item" style="color:${taitungColor};"><div class="fee-item-label">${taitungLabel}</div><div class="fee-item-val">${taitungVal}</div></div>
+          <div class="fee-op">=</div>
+          <div class="fee-item"><div class="fee-item-label">尾款</div><div class="fee-item-val fee-balance-val">$${fee.balance.toLocaleString()}</div></div>
+        </div>
+        ${balDueHtml}${buildUranusHtml()}
       </div>`;
     }
-
-    feeEl.innerHTML = `<div class="fee-card">
-      <div class="fee-title">團費明細</div>
-      <div class="fee-formula">
-        <div class="fee-item">
-          <div class="fee-item-label">綠島團費（固定）</div>
-          <div class="fee-item-val">$6,500</div>
-        </div>
-        <div class="fee-op">−</div>
-        <div class="fee-item">
-          <div class="fee-item-label">已付訂金</div>
-          <div class="fee-item-val">$${fee.deposit.toLocaleString()}</div>
-        </div>
-        <div class="fee-op" style="color:${taitungColor};">+</div>
-        <div class="fee-item" style="color:${taitungColor};">
-          <div class="fee-item-label">${taitungLabel}</div>
-          <div class="fee-item-val">${taitungVal}</div>
-        </div>
-        <div class="fee-op">=</div>
-        <div class="fee-item">
-          <div class="fee-item-label">尾款</div>
-          <div class="fee-item-val fee-balance-val">$${fee.balance.toLocaleString()}</div>
-        </div>
-      </div>
-      ${balDueHtml}${uranusHtml}
-    </div>`;
   } else {
     feeEl.innerHTML = '';
   }

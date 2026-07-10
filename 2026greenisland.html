@@ -768,92 +768,11 @@
   #result.vip .tl-dot { background: #D4AF37; }
   #result.vip .tl-dot.special { background: #ffe47a; box-shadow: 0 0 8px rgba(212,175,55,0.8); }
 
-  /* ── 主辦人 八月 極光主題 ── */
-  @keyframes auroraPulse {
-    0%, 100% { box-shadow: 0 0 18px rgba(120,60,220,0.22), 0 0 40px rgba(0,180,220,0.07); }
-    50%       { box-shadow: 0 0 32px rgba(120,60,220,0.50), 0 0 70px rgba(0,180,220,0.18); }
-  }
-  @keyframes auroraShimmer {
-    0%   { background-position: -200% center; }
-    100% { background-position:  200% center; }
-  }
   @keyframes auroraWave {
     0%   { background-position: 0% 50%; }
     50%  { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
-  body.host-mode { background: #04010f; }
-  body.host-mode .bg-wrap {
-    background: radial-gradient(ellipse 80% 50% at 30% 0%, rgba(120,60,220,0.18) 0%, transparent 55%),
-                radial-gradient(ellipse 60% 40% at 75% 5%, rgba(0,180,220,0.14) 0%, transparent 50%),
-                linear-gradient(180deg, #080018 0%, #04010f 50%, #060010 100%) !important;
-    animation: vipBgIn 0.8s ease;
-  }
-  body.host-mode .bg-wrap::before {
-    background: radial-gradient(ellipse 120% 60% at 50% -10%,
-      rgba(155,89,182,0.25) 0%,
-      rgba(52,152,219,0.18) 35%,
-      rgba(0,188,212,0.12) 65%,
-      transparent 100%) !important;
-    box-shadow: 0 0 120px 60px rgba(120,60,220,0.18), 0 0 200px 100px rgba(0,180,220,0.10) !important;
-    animation: auroraWave 8s ease infinite !important;
-    background-size: 300% 300% !important;
-  }
-  #host-particles { position:fixed; inset:0; z-index:1; pointer-events:none; }
-  #host-toast {
-    position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(0);
-    z-index: 9999;
-    background: linear-gradient(135deg, #0d0025, #1a0050, #001833);
-    border: 1px solid rgba(0,200,230,0.65);
-    color: #00c8e6;
-    font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.2em;
-    padding: 13px 36px; border-radius: 40px;
-    box-shadow: 0 0 40px rgba(120,60,220,0.4), 0 0 20px rgba(0,200,230,0.25), inset 0 0 20px rgba(120,60,220,0.08);
-    animation: vipToastIn 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
-    white-space: nowrap;
-  }
-  #result.host .person-header {
-    background: linear-gradient(135deg, rgba(8,0,30,0.97), rgba(15,0,45,0.95));
-    border: 1px solid rgba(120,60,220,0.5);
-    animation: auroraPulse 3s ease-in-out infinite;
-    position: relative; overflow: hidden;
-  }
-  #result.host .person-header::before {
-    content: '';
-    position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(120,60,220,0.08), rgba(0,188,212,0.05), transparent);
-    animation: auroraShimmer 4s linear infinite;
-    pointer-events: none;
-  }
-  #result.host .avatar {
-    background: linear-gradient(135deg, #2d0060, #7b2fbe, #00bcd4, #3498db, #2d0060);
-    background-size: 300% 300%;
-    animation: auroraWave 4s ease infinite;
-    box-shadow: 0 0 18px rgba(120,60,220,0.7), 0 0 8px rgba(0,200,230,0.4);
-    color: #fff; font-weight: 800;
-  }
-  #result.host .person-name { color: #a78bfa; text-shadow: 0 0 18px rgba(120,60,220,0.8), 0 0 40px rgba(0,200,230,0.4); font-weight: 700; }
-  #result.host .person-meta { color: rgba(100,160,220,0.6); }
-  .host-badge {
-    display: inline-flex; align-items: center;
-    background: linear-gradient(135deg, #0d0025, #1a0050);
-    border: 1px solid rgba(0,200,230,0.65);
-    color: #00c8e6; font-size: 10px;
-    font-family: 'DM Mono', monospace; letter-spacing: 0.15em;
-    padding: 2px 10px; border-radius: 20px; margin-left: 8px;
-    vertical-align: middle;
-  }
-  #result.host .section-title { color: rgba(140,100,240,0.85); }
-  #result.host .card { background: rgba(8,0,30,0.75); border-color: rgba(120,60,220,0.22); }
-  #result.host .badge-go   { background: #1a0050; color: #a78bfa; }
-  #result.host .badge-back { background: #001833; color: #00c8e6; }
-  #result.host .badge-tbd  { background: rgba(120,60,220,0.08); color: rgba(140,100,240,0.45); }
-  #result.host .fee-card   { background: rgba(120,60,220,0.06); border-color: rgba(120,60,220,0.32); }
-  #result.host .fee-title, #result.host .fee-due { color: rgba(140,100,240,0.85); }
-  #result.host .fee-balance-val { color: #a78bfa; }
-  #result.host .day-tab.active { background: rgba(120,60,220,0.14); border-color: rgba(120,60,220,0.50); color: #a78bfa; }
-  #result.host .tl-dot { background: #7b2fbe; }
-  #result.host .tl-dot.special { background: #00c8e6; box-shadow: 0 0 8px rgba(0,200,230,0.8); }
 
   /* ── 開場畫面 ── */
   #splash {
@@ -1234,8 +1153,8 @@ const FEE_DATA = {
   "阿緯": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2C", taitung_fee: 780, uranus_total: 100, uranus_paid: 100, balance_paid: "06/20" },
   "八月": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2B", taitung_fee: 780, uranus_total: 100, uranus_paid: 100, balance_paid: "06/16" },
   "詩豪": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2B", taitung_fee: 780, uranus_total: 100, uranus_paid: 100, balance_paid: "06/21" },
-  "雞腿": { deposit: 3000, balance: 3500, taitung_room: "欣京棧1D", taitung_fee: 750, taitung_paid: false, uranus_total: 100, uranus_paid: 100, balance_paid: "06/16" },
-  "可樂": { deposit: 3000, balance: 3500, taitung_room: "欣京棧1D", taitung_fee: 750, taitung_paid: false, uranus_total: 100, uranus_paid: 100, balance_paid: "06/30" },
+  "雞腿": { deposit: 3000, balance: 3500, taitung_room: "欣京棧1D", taitung_fee: 750, taitung_paid: true, uranus_total: 100, uranus_paid: 100, balance_paid: "06/16" },
+  "可樂": { deposit: 3000, balance: 3500, taitung_room: "欣京棧1D", taitung_fee: 750, taitung_paid: true, uranus_total: 100, uranus_paid: 100, balance_paid: "06/30" },
   "小丞": { deposit: 3000, balance: 3500, taitung_room: "", taitung_fee: 0, uranus_total: 100, uranus_paid: 0, balance_paid: "" },
   "小晏": { deposit: 6500, balance: 780, taitung_room: "欣京棧2B", taitung_fee: 780, uranus_total: 100, uranus_paid: 0, balance_paid: "06/18" },
   "阿哲": { deposit: 3000, balance: 4280, taitung_room: "欣京棧2C", taitung_fee: 780, uranus_total: 100, uranus_paid: 0, balance_paid: "06/16" },
@@ -1388,7 +1307,6 @@ function pickPerson(name) {
 function renderResult(p) {
   // 特殊主題模式
   const isVIP  = p.display === '詩豪';
-  const isHost = p.display === '八月';
   const resultEl = document.getElementById('result');
 
   // 清除所有特殊狀態
@@ -1402,19 +1320,13 @@ function renderResult(p) {
     document.body.classList.add('vip-mode');
     startGoldParticles();
     showVIPToast();
-  } else if (isHost) {
-    resultEl.classList.add('host');
-    document.body.classList.add('host-mode');
-    startJadeParticles();
-    showHostToast();
   }
 
   // avatar
   document.getElementById('avatarEl').textContent = p.display ? p.display[0] : p.name[0];
   const nameEl = document.getElementById('nameEl');
   nameEl.innerHTML = p.display
-    + (isVIP  ? ' <span class="vip-badge">VVVIP</span>'  : '')
-    + (isHost ? ' <span class="host-badge">主辦人</span>' : '');
+    + (isVIP  ? ' <span class="vip-badge">VVVIP</span>'  : '');
   const extraAliases = p.aliases.slice(1);
   const metaParts = [];
   if (extraAliases.length > 0) metaParts.push(extraAliases.join(' / '));

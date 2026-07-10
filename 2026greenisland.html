@@ -768,6 +768,93 @@
   #result.vip .tl-dot { background: #D4AF37; }
   #result.vip .tl-dot.special { background: #ffe47a; box-shadow: 0 0 8px rgba(212,175,55,0.8); }
 
+  /* ── 主辦人 八月 極光主題 ── */
+  @keyframes auroraPulse {
+    0%, 100% { box-shadow: 0 0 18px rgba(120,60,220,0.22), 0 0 40px rgba(0,180,220,0.07); }
+    50%       { box-shadow: 0 0 32px rgba(120,60,220,0.50), 0 0 70px rgba(0,180,220,0.18); }
+  }
+  @keyframes auroraShimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+  }
+  @keyframes auroraWave {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  body.host-mode { background: #04010f; }
+  body.host-mode .bg-wrap {
+    background: radial-gradient(ellipse 80% 50% at 30% 0%, rgba(120,60,220,0.18) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 40% at 75% 5%, rgba(0,180,220,0.14) 0%, transparent 50%),
+                linear-gradient(180deg, #080018 0%, #04010f 50%, #060010 100%) !important;
+    animation: vipBgIn 0.8s ease;
+  }
+  body.host-mode .bg-wrap::before {
+    background: radial-gradient(ellipse 120% 60% at 50% -10%,
+      rgba(155,89,182,0.25) 0%,
+      rgba(52,152,219,0.18) 35%,
+      rgba(0,188,212,0.12) 65%,
+      transparent 100%) !important;
+    box-shadow: 0 0 120px 60px rgba(120,60,220,0.18), 0 0 200px 100px rgba(0,180,220,0.10) !important;
+    animation: auroraWave 8s ease infinite !important;
+    background-size: 300% 300% !important;
+  }
+  #host-particles { position:fixed; inset:0; z-index:1; pointer-events:none; }
+  #host-toast {
+    position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(0);
+    z-index: 9999;
+    background: linear-gradient(135deg, #0d0025, #1a0050, #001833);
+    border: 1px solid rgba(0,200,230,0.65);
+    color: #00c8e6;
+    font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.2em;
+    padding: 13px 36px; border-radius: 40px;
+    box-shadow: 0 0 40px rgba(120,60,220,0.4), 0 0 20px rgba(0,200,230,0.25), inset 0 0 20px rgba(120,60,220,0.08);
+    animation: vipToastIn 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    white-space: nowrap;
+  }
+  #result.host .person-header {
+    background: linear-gradient(135deg, rgba(8,0,30,0.97), rgba(15,0,45,0.95));
+    border: 1px solid rgba(120,60,220,0.5);
+    animation: auroraPulse 3s ease-in-out infinite;
+    position: relative; overflow: hidden;
+  }
+  #result.host .person-header::before {
+    content: '';
+    position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(120,60,220,0.08), rgba(0,188,212,0.05), transparent);
+    animation: auroraShimmer 4s linear infinite;
+    pointer-events: none;
+  }
+  #result.host .avatar {
+    background: linear-gradient(135deg, #2d0060, #7b2fbe, #00bcd4, #3498db, #2d0060);
+    background-size: 300% 300%;
+    animation: auroraWave 4s ease infinite;
+    box-shadow: 0 0 18px rgba(120,60,220,0.7), 0 0 8px rgba(0,200,230,0.4);
+    color: #fff; font-weight: 800;
+  }
+  #result.host .person-name { color: #a78bfa; text-shadow: 0 0 18px rgba(120,60,220,0.8), 0 0 40px rgba(0,200,230,0.4); font-weight: 700; }
+  #result.host .person-meta { color: rgba(100,160,220,0.6); }
+  .host-badge {
+    display: inline-flex; align-items: center;
+    background: linear-gradient(135deg, #0d0025, #1a0050);
+    border: 1px solid rgba(0,200,230,0.65);
+    color: #00c8e6; font-size: 10px;
+    font-family: 'DM Mono', monospace; letter-spacing: 0.15em;
+    padding: 2px 10px; border-radius: 20px; margin-left: 8px;
+    vertical-align: middle;
+  }
+  #result.host .section-title { color: rgba(140,100,240,0.85); }
+  #result.host .card { background: rgba(8,0,30,0.75); border-color: rgba(120,60,220,0.22); }
+  #result.host .badge-go   { background: #1a0050; color: #a78bfa; }
+  #result.host .badge-back { background: #001833; color: #00c8e6; }
+  #result.host .badge-tbd  { background: rgba(120,60,220,0.08); color: rgba(140,100,240,0.45); }
+  #result.host .fee-card   { background: rgba(120,60,220,0.06); border-color: rgba(120,60,220,0.32); }
+  #result.host .fee-title, #result.host .fee-due { color: rgba(140,100,240,0.85); }
+  #result.host .fee-balance-val { color: #a78bfa; }
+  #result.host .day-tab.active { background: rgba(120,60,220,0.14); border-color: rgba(120,60,220,0.50); color: #a78bfa; }
+  #result.host .tl-dot { background: #7b2fbe; }
+  #result.host .tl-dot.special { background: #00c8e6; box-shadow: 0 0 8px rgba(0,200,230,0.8); }
+
   /* ── VISIT COUNTER ── */
   .visit-footer {
     display: flex; align-items: center; justify-content: center; gap: 0;
@@ -811,23 +898,6 @@
     <p class="hero-sub">2026.08.01 — 08.04 · GREEN ISLAND</p>
     <div id="countdownWrap"></div>
 
-    <div style="margin: 18px 0 14px; padding: 14px 18px; background: rgba(255,110,20,0.10); border: 1px solid rgba(255,110,20,0.40); border-radius: 14px; text-align: center;">
-      <div style="font-size: 10px; font-family: 'DM Mono', monospace; letter-spacing: 0.12em; color: rgba(255,140,60,0.85); margin-bottom: 10px; text-transform: uppercase;">台鐵搶票時間</div>
-      <div style="display: flex; flex-direction: column; gap: 8px;">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13px;">
-          <span style="color: rgba(255,255,255,0.65);">7/31 車票</span>
-          <span style="color: rgba(255,120,30,0.4);">·</span>
-          <span style="color: #ff7820; font-family: 'DM Mono', monospace; font-weight: 600;">7/3（五）凌晨 00:00</span>
-          <span style="color: rgba(255,140,60,0.6); font-size: 11px;">開搶</span>
-        </div>
-        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13px;">
-          <span style="color: rgba(255,255,255,0.65);">8/4 車票</span>
-          <span style="color: rgba(255,120,30,0.4);">·</span>
-          <span style="color: #ff7820; font-family: 'DM Mono', monospace; font-weight: 600;">7/7（二）凌晨 00:00</span>
-          <span style="color: rgba(255,140,60,0.6); font-size: 11px;">開搶</span>
-        </div>
-      </div>
-    </div>
 
     <div class="search-card">
       <span class="search-label">輸入綽號，查看你的行程與船班</span>
@@ -1221,24 +1291,35 @@ function pickPerson(name) {
 }
 
 function renderResult(p) {
-  // VIP 模式
-  const isVIP = p.display === '詩豪';
+  // 特殊主題模式
+  const isVIP  = p.display === '詩豪';
+  const isHost = p.display === '八月';
   const resultEl = document.getElementById('result');
+
+  // 清除所有特殊狀態
+  resultEl.classList.remove('vip', 'host');
+  document.body.classList.remove('vip-mode', 'host-mode');
+  stopGoldParticles();
+  stopJadeParticles();
+
   if (isVIP) {
     resultEl.classList.add('vip');
     document.body.classList.add('vip-mode');
     startGoldParticles();
     showVIPToast();
-  } else {
-    resultEl.classList.remove('vip');
-    document.body.classList.remove('vip-mode');
-    stopGoldParticles();
+  } else if (isHost) {
+    resultEl.classList.add('host');
+    document.body.classList.add('host-mode');
+    startJadeParticles();
+    showHostToast();
   }
 
   // avatar
   document.getElementById('avatarEl').textContent = p.display ? p.display[0] : p.name[0];
   const nameEl = document.getElementById('nameEl');
-  nameEl.innerHTML = p.display + (isVIP ? ' <span class="vip-badge">VVVIP</span>' : '');
+  nameEl.innerHTML = p.display
+    + (isVIP  ? ' <span class="vip-badge">VVVIP</span>'  : '')
+    + (isHost ? ' <span class="host-badge">主辦人</span>' : '');
   const extraAliases = p.aliases.slice(1);
   const metaParts = [];
   if (extraAliases.length > 0) metaParts.push(extraAliases.join(' / '));
@@ -1528,9 +1609,10 @@ function switchDay(idx) {
 
 function resetView() {
   document.getElementById('result').style.display = 'none';
-  document.getElementById('result').classList.remove('vip');
-  document.body.classList.remove('vip-mode');
+  document.getElementById('result').classList.remove('vip', 'host');
+  document.body.classList.remove('vip-mode', 'host-mode');
   stopGoldParticles();
+  stopJadeParticles();
   document.getElementById('nameInput').value = '';
   document.getElementById('errMsg').style.display = 'none';
   document.getElementById('suggestList').style.display = 'none';
@@ -1880,6 +1962,98 @@ function toggleFerryOverview() {
 </script>
 
 <script>
+// ── 主辦人 極光粒子 ──────────────────────────────────
+let _jadeParticleRAF = null;
+
+function startJadeParticles() {
+  stopJadeParticles();
+  const canvas = document.createElement('canvas');
+  canvas.id = 'host-particles';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const COLORS = ['#9b59b6','#7b2fbe','#3498db','#00bcd4','#8e44ad','#2980b9','#a78bfa','#00c8e6'];
+  // Aurora curtain bands (horizontal slow-moving bands near top)
+  const bands = Array.from({ length: 4 }, (_, i) => ({
+    y: 0.05 + i * 0.06,
+    width: 0.5 + Math.random() * 0.5,
+    speed: 0.0003 + Math.random() * 0.0002,
+    phase: Math.random() * Math.PI * 2,
+    color1: COLORS[i * 2 % COLORS.length],
+    color2: COLORS[(i * 2 + 1) % COLORS.length],
+    alpha: 0.06 + Math.random() * 0.06,
+  }));
+  // Floating particles
+  const particles = Array.from({ length: 70 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight + window.innerHeight,
+    r: Math.random() * 2.5 + 0.5,
+    speed: Math.random() * 0.5 + 0.2,
+    drift: (Math.random() - 0.5) * 0.4,
+    alpha: Math.random() * 0.6 + 0.2,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    twinkle: Math.random() * Math.PI * 2,
+    twinkleSpeed: Math.random() * 0.02 + 0.007,
+  }));
+  let t = 0;
+  function draw() {
+    t++;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Draw aurora curtain bands
+    bands.forEach(b => {
+      const cx = canvas.width * (0.3 + 0.4 * Math.sin(t * b.speed + b.phase));
+      const bw = canvas.width * b.width;
+      const by = canvas.height * b.y;
+      const bh = canvas.height * 0.12;
+      const grd = ctx.createRadialGradient(cx, by, 0, cx, by, bw * 0.5);
+      grd.addColorStop(0, b.color1 + 'cc');
+      grd.addColorStop(0.5, b.color2 + '55');
+      grd.addColorStop(1, 'transparent');
+      ctx.save();
+      ctx.globalAlpha = b.alpha * (0.7 + 0.3 * Math.sin(t * b.speed * 3 + b.phase));
+      ctx.fillStyle = grd;
+      ctx.beginPath();
+      ctx.ellipse(cx, by, bw * 0.5, bh, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+    // Draw particles
+    particles.forEach(p => {
+      p.y -= p.speed; p.x += p.drift; p.twinkle += p.twinkleSpeed;
+      const a = p.alpha * (0.55 + 0.45 * Math.sin(p.twinkle));
+      ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color; ctx.shadowBlur = 9;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+      if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+    });
+    _jadeParticleRAF = requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+function stopJadeParticles() {
+  if (_jadeParticleRAF) { cancelAnimationFrame(_jadeParticleRAF); _jadeParticleRAF = null; }
+  const c = document.getElementById('host-particles');
+  if (c) c.remove();
+}
+
+function showHostToast() {
+  const old = document.getElementById('host-toast');
+  if (old) old.remove();
+  const toast = document.createElement('div');
+  toast.id = 'host-toast';
+  toast.textContent = '✦   August  八月   ✦';
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.style.transition = 'opacity 0.8s, transform 0.8s';
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(-50%) translateY(-12px)';
+    setTimeout(() => toast.remove(), 800);
+  }, 3200);
+}
+
 // ── VVVIP 金色粒子 ────────────────────────────────────
 let _vipParticleRAF = null;
 

@@ -1593,8 +1593,8 @@ function renderResult(p) {
       </div>`;
     }).join('');
 
-    // 8/2 搭船者：Day 1 反灰 + 提示橫幅
-    const isGrayedDay = isDay2Arrival && day.day === 'Day 1';
+    // 8/2 搭船者：Day 0 + Day 1 反灰 + 提示橫幅
+    const isGrayedDay = isDay2Arrival && (day.day === 'Day 0' || day.day === 'Day 1');
     const grayBanner = isGrayedDay
       ? `<div style="margin:8px 18px 4px;padding:6px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;font-size:11px;color:rgba(255,255,255,0.4);font-family:'DM Mono',monospace;">此日搭乘 8/2 船班，尚未抵達綠島</div>`
       : '';
